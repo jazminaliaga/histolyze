@@ -1,0 +1,565 @@
+<div class="container-fluid px-4">
+
+  <div class="d-flex justify-content-between align-items-center mb-4">
+    <div>
+      <h1 class="mt-4" id="nombre-paciente-header">Perfil del Paciente</h1>
+      <ol class="breadcrumb mb-0">
+        <li class="breadcrumb-item"><a href="#" onclick="window.location.reload()">Dashboard</a></li>
+        <li class="breadcrumb-item active">Pacientes</li>
+        <li class="breadcrumb-item active">Detalle</li>
+      </ol>
+    </div>
+    <button class="btn btn-secondary" id="btn-volver-historial">&larr; Volver al Historial</button>
+  </div>
+
+  <div class="card mb-4">
+    <div class="card-header d-flex justify-content-between">
+      <h5>Datos Personales</h5>
+      <button class="btn btn-sm btn-outline-primary" id="btn-editar-personales">Editar</button>
+    </div>
+    <div class="card-body" id="datos-personales-view"></div>
+    <div class="card-body d-none" id="datos-personales-edit">
+      <form id="form-edit-paciente"></form>
+    </div>
+  </div>
+
+  <div class="card mb-4">
+    <div class="card-header d-flex justify-content-between">
+      <h5>Diagnóstico y Antecedentes Generales</h5>
+      <button class="btn btn-sm btn-outline-primary" id="btn-editar-antecedentes">Editar</button>
+    </div>
+    <div class="card-body" id="antecedentes-view"></div>
+    <div class="card-body d-none" id="antecedentes-edit">
+      <form id="form-edit-antecedentes"></form>
+    </div>
+  </div>
+
+  <div class="card mb-4">
+    <div class="card-header">
+      <h5>Carga de Familiares</h5>
+    </div>
+    <div class="card-body">
+      <div class="d-flex justify-content-end mb-3">
+        <button class="btn btn-success btn-sm" data-bs-toggle="modal"
+          data-bs-target="#modalAgregarFamiliar">Agregar Familiar</button>
+      </div>
+      <div id="contenedor-tabla-familiares"></div>
+    </div>
+  </div>
+  <h5>Historial Detallado</h5>
+  <div class="accordion" id="historialAccordion">
+
+    <div class="accordion-item">
+      <h2 class="accordion-header">
+        <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse"
+          data-bs-target="#collapseTrasplantes">
+          Historial de Trasplantes
+        </button>
+      </h2>
+      <div id="collapseTrasplantes" class="accordion-collapse collapse" data-bs-parent="#historialAccordion">
+        <div class="card-body">
+          <div class="d-flex justify-content-end mb-3">
+            <button class="btn btn-success btn-sm" data-bs-toggle="modal"
+              data-bs-target="#modalAgregarTrasplante">Agregar Trasplante</button>
+          </div>
+          <div id="contenedor-tabla-trasplantes"></div>
+        </div>
+      </div>
+    </div>
+
+    <div class="accordion-item">
+      <h2 class="accordion-header">
+        <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse"
+          data-bs-target="#collapseTransfusiones">
+          Historial de Transfusiones
+        </button>
+      </h2>
+      <div id="collapseTransfusiones" class="accordion-collapse collapse" data-bs-parent="#historialAccordion">
+        <div class="card-body">
+          <div class="d-flex justify-content-end mb-3">
+            <button class="btn btn-success btn-sm" data-bs-toggle="modal"
+              data-bs-target="#modalAgregarTransfusion">Agregar Transfusión</button>
+          </div>
+          <div id="contenedor-tabla-transfusiones"></div>
+        </div>
+      </div>
+    </div>
+
+    <div class="accordion-item">
+      <h2 class="accordion-header">
+        <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse"
+          data-bs-target="#collapseHla">
+          Historial de Estudios HLA
+        </button>
+      </h2>
+      <div id="collapseHla" class="accordion-collapse collapse" data-bs-parent="#historialAccordion">
+        <div class="card-body">
+          <div class="d-flex justify-content-end mb-3">
+            <button class="btn btn-success btn-sm" data-bs-toggle="modal" data-bs-target="#modalAgregarHLA">Agregar
+              Estudio HLA</button>
+          </div>
+          <div id="contenedor-tabla-hla"></div>
+        </div>
+      </div>
+    </div>
+
+    <div class="accordion-item">
+      <h2 class="accordion-header">
+        <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse"
+          data-bs-target="#collapseDsa">
+          Historial de Estudios DSA
+        </button>
+      </h2>
+      <div id="collapseDsa" class="accordion-collapse collapse" data-bs-parent="#historialAccordion">
+        <div class="card-body">
+          <div class="d-flex justify-content-end mb-3">
+            <button class="btn btn-success btn-sm" data-bs-toggle="modal" data-bs-target="#modalAgregarDsa"
+              onclick="setModalState('modalAgregarDsa', 'edit')">Agregar
+              Estudio DSA</button>
+          </div>
+          <div id="contenedor-tabla-dsa"></div>
+        </div>
+      </div>
+    </div>
+
+    <div class="accordion-item">
+      <h2 class="accordion-header">
+        <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse"
+          data-bs-target="#collapseCrossmatch">
+          Historial de Cross-match contra panel
+        </button>
+      </h2>
+      <div id="collapseCrossmatch" class="accordion-collapse collapse" data-bs-parent="#historialAccordion">
+        <div class="card-body">
+          <div class="d-flex justify-content-end mb-3">
+            <button class="btn btn-success btn-sm" data-bs-toggle="modal"
+              data-bs-target="#modalAgregarCrossmatch">Agregar Cross-match</button>
+          </div>
+          <div id="contenedor-tabla-crossmatch"></div>
+        </div>
+      </div>
+    </div>
+
+    </div> </div> <div class="modal fade" id="modalAgregarTransfusion" tabindex="-1" aria-labelledby="modalAgregarTransfusionLabel"
+  aria-hidden="true">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <form>
+        <div class="modal-header">
+          <h5 class="modal-title" id="modalAgregarTransfusionLabel">Agregar/Editar Transfusión</h5>
+          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+        </div>
+        <div class="modal-body">
+          <div class="mb-3">
+            <label class="form-label">Fecha</label>
+            <input type="date" class="form-control" name="fecha" required>
+          </div>
+          <div class="mb-3">
+            <label class="form-label">Tipo</label>
+            <select class="form-select" name="tipo" required>
+              <option value="" disabled selected>Seleccionar...</option>
+              <option value="CRIOPRECIPITADOS">Crioprecipitados</option>
+              <option value="PLAQUETOFERESIS">Plaquetoferesis</option>
+              <option value="PLASMAFERESIS">Plasmaferesis</option>
+              <option value="SEDIMENTO_GLOBULAR">Sedimento Globular</option>
+            </select>
+          </div>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cerrar</button>
+          <button type="submit" class="btn btn-primary">Guardar</button>
+        </div>
+      </form>
+    </div>
+  </div>
+</div>
+
+<div class="modal fade" id="modalAgregarTrasplante" tabindex="-1" aria-labelledby="modalAgregarTrasplanteLabel"
+  aria-hidden="true">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <form>
+        <div class="modal-header">
+          <h5 class="modal-title" id="modalAgregarTrasplanteLabel">Agregar/Editar Trasplante</h5>
+          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+        </div>
+        <div class="modal-body">
+          <div class="mb-3">
+            <label class="form-label">Fecha</label>
+            <input type="date" class="form-control" name="fecha" required>
+          </div>
+          <div class="mb-3">
+            <label class="form-label">Tipo</label>
+            <select class="form-select" name="tipo" required>
+              <option value="" disabled selected>Seleccionar...</option>
+              <option value="DONANTEVIVO">Donante Vivo</option>
+              <option value="DONANTECADAVERICO">Donante Cadavérico</option>
+            </select>
+          </div>
+          <div class="mb-3">
+            <label class="form-label">PD (Proceso Donación)</label>
+            <input type="text" class="form-control" name="procesoDonacion">
+          </div>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cerrar</button>
+          <button type="submit" class="btn btn-primary">Guardar</button>
+        </div>
+      </form>
+    </div>
+  </div>
+</div>
+
+<div class="modal fade" id="modalAgregarHLA" tabindex="-1" aria-labelledby="modalAgregarHLALabel" aria-hidden="true">
+  <div class="modal-dialog modal-lg">
+    <div class="modal-content">
+      <form>
+        <div class="modal-header">
+          <h5 class="modal-title" id="modalAgregarHLALabel">Agregar/Editar Estudio HLA</h5>
+          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+        </div>
+        <div class="modal-body">
+          <div class="row">
+            <div class="col-md-6 mb-3">
+              <label class="form-label">Fecha de Registro</label>
+              <input type="date" class="form-control" name="fechaRegistro" required>
+            </div>
+            <div class="col-md-6 mb-3">
+              <label class="form-label">Nro. Muestra</label>
+              <input type="text" class="form-control" name="numeroMuestra">
+            </div>
+          </div>
+          <hr>
+          <h6>Locus Clase I</h6>
+          <div class="row">
+            <div class="col-md-4 mb-3">
+              <label class="form-label">Locus A</label>
+              <div class="input-group">
+                <input type="text" class="form-control" name="locusA01" placeholder="A1">
+                <input type="text" class="form-control" name="locusA02" placeholder="A2">
+              </div>
+            </div>
+            <div class="col-md-4 mb-3">
+              <label class="form-label">Locus B</label>
+              <div class="input-group">
+                <input type="text" class="form-control" name="locusB01" placeholder="B1">
+                <input type="text" class="form-control" name="locusB02" placeholder="B2">
+              </div>
+            </div>
+            <div class="col-md-4 mb-3">
+              <label class="form-label">Locus C</label>
+              <div class="input-group">
+                <input type="text" class="form-control" name="locusC01" placeholder="C1">
+                <input type="text" class="form-control" name="locusC02" placeholder="C2">
+              </div>
+            </div>
+          </div>
+          <h6>Locus Clase II</h6>
+          <div class="row">
+            <div class="col-md-4 mb-3">
+              <label class="form-label">Locus DR</label>
+              <div class="input-group">
+                <input type="text" class="form-control" name="locusDR01" placeholder="DR1">
+                <input type="text" class="form-control" name="locusDR02" placeholder="DR2">
+              </div>
+            </div>
+            <div class="col-md-4 mb-3">
+              <label class="form-label">Locus DQA</label>
+              <div class="input-group">
+                <input type="text" class="form-control" name="locusDQA01" placeholder="DQA1">
+                <input type="text" class="form-control" name="locusDQA02" placeholder="DQA2">
+              </div>
+            </div>
+            <div class="col-md-4 mb-3">
+              <label class="form-label">Locus DQB</label>
+              <div class="input-group">
+                <input type="text" class="form-control" name="locusDQB01" placeholder="DQB1">
+                <input type="text" class="form-control" name="locusDQB02" placeholder="DQB2">
+              </div>
+            </div>
+            <div class="col-md-4 mb-3">
+              <label class="form-label">Locus DPA</label>
+              <div class="input-group">
+                <input type="text" class="form-control" name="locusDPA01" placeholder="DPA1">
+                <input type="text" class="form-control" name="locusDPA02" placeholder="DPA2">
+              </div>
+            </div>
+            <div class="col-md-4 mb-3">
+              <label class="form-label">Locus DPB</label>
+              <div class="input-group">
+                <input type="text" class="form-control" name="locusDPB01" placeholder="DPB1">
+                <input type="text" class="form-control" name="locusDPB02" placeholder="DPB2">
+              </div>
+            </div>
+          </div>
+          <div class="row">
+            <div class="col-md-6 mb-3">
+              <label class="form-label">Grupo Sanguíneo</label>
+              <select class="form-select" name="grupoSanguineo">
+                <option value="">Seleccionar...</option>
+                <option value="A_POSITIVO">A+</option>
+                <option value="A_NEGATIVO">A-</option>
+                <option value="B_POSITIVO">B+</option>
+                <option value="B_NEGATIVO">B-</option>
+                <option value="AB_POSITIVO">AB+</option>
+                <option value="AB_NEGATIVO">AB-</option>
+                <option value="O_POSITIVO">O+</option>
+                <option value="O_NEGATIVO">O-</option>
+              </select>
+            </div>
+          </div>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cerrar</button>
+          <button type="submit" class="btn btn-primary">Guardar</button>
+        </div>
+      </form>
+    </div>
+  </div>
+</div>
+
+<div class="modal fade" id="modalAgregarDsa" tabindex="-1" aria-labelledby="modalAgregarDsaLabel" aria-hidden="true">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <form>
+        <div class="modal-header">
+          <h5 class="modal-title" id="modalAgregarDsaLabel">Agregar/Editar Estudio DSA</h5>
+          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+        </div>
+        <div class="modal-body">
+          <div class="mb-3">
+            <label class="form-label">Fecha</label>
+            <input type="date" class="form-control" name="fecha" required>
+          </div>
+          <div class="mb-3">
+            <label class="form-label">Nro. Muestra</label>
+            <input type="text" class="form-control" name="numeroMuestra">
+          </div>
+          <div class="mb-3">
+            <label class="form-label">Nombre Paciente</label>
+            <input type="text" class="form-control" name="nombrePaciente">
+          </div>
+          <div class="mb-3">
+            <label class="form-label">Médico Solicitante</label>
+            <input type="text" class="form-control" name="medicoSolicitante">
+          </div>
+          <div class="mb-3">
+            <label class="form-label">DNI Paciente</label>
+            <input type="text" class="form-control" name="dniPaciente">
+          </div>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cerrar</button>
+          <button type="submit" class="btn btn-primary">Guardar</button>
+        </div>
+      </form>
+    </div>
+  </div>
+</div>
+
+<div class="modal fade" id="modalAgregarCrossmatch" tabindex="-1" aria-labelledby="modalAgregarCrossmatchLabel"
+  aria-hidden="true">
+  <div class="modal-dialog modal-lg">
+    <div class="modal-content">
+      <form>
+        <div class="modal-header">
+          <h5 class="modal-title" id="modalAgregarCrossmatchLabel">Agregar/Editar Cross-match</h5>
+          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+        </div>
+        <div class="modal-body">
+          <div class="row">
+            <div class="col-md-6 mb-3">
+              <label class="form-label">Fecha</label>
+              <input type="date" class="form-control" name="fecha" required>
+            </div>
+            <div class="col-md-6 mb-3">
+              <label class="form-label">Nro. Muestra</label>
+              <input type="text" class="form-control" name="numeroMuestra">
+            </div>
+          </div>
+          <div class="row">
+            <div class="col-md-4 mb-3">
+              <label class="form-label">Anti-HLA I (%)</label>
+              <input type="number" class="form-control" name="antiHla1" min="0" max="100">
+            </div>
+            <div class="col-md-4 mb-3">
+              <label class="form-label">Anti-HLA II (%)</label>
+              <input type="number" class="form-control" name="antiHla2" min="0" max="100">
+            </div>
+            <div class="col-md-4 mb-3">
+              <label class="form-label">Resultado Anti MICA</label>
+              <select class="form-select" name="resultado" required>
+                <option value="" disabled selected>Seleccionar...</option>
+                <option value="POSITIVO">Positivo</option>
+                <option value="NEGATIVO">Negativo</option>
+              </select>
+            </div>
+          </div>
+          <div class="mb-3">
+            <label class="form-label">Anticuerpos No Confirmados</label>
+            <input type="text" class="form-control" name="anticuerposNoConfirmados">
+          </div>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cerrar</button>
+          <button type="submit" class="btn btn-primary">Guardar</button>
+        </div>
+      </form>
+    </div>
+  </div>
+</div>
+
+<div class="modal fade" id="modalVerDsaResultado" tabindex="-1" aria-labelledby="modalVerDsaResultadoLabel"
+  aria-hidden="true">
+  <div class="modal-dialog modal-xl">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="modalVerDsaResultadoLabel">Resultados del Estudio DSA</h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <div class="modal-body">
+        <p><strong>Paciente:</strong> <span id="dsa-paciente"></span></p>
+        <p><strong>Nro. Muestra:</strong> <span id="dsa-muestra"></span></p>
+        <p><strong>Fecha:</strong> <span id="dsa-fecha"></span></p>
+        <hr>
+        <div id="dsa-tabla-container" class="table-responsive"></div>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cerrar</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="modal fade" id="modalEditarAnticuerpo" tabindex="-1" aria-labelledby="modalEditarAnticuerpoLabel"
+  aria-hidden="true">
+  <div class="modal-dialog">
+    <div class="modal-content"></div>
+  </div>
+</div>
+
+<div class="modal fade" id="modalAgregarFamiliar" tabindex="-1" aria-labelledby="modalAgregarFamiliarLabel"
+  aria-hidden="true">
+  <div class="modal-dialog modal-lg">
+    <div class="modal-content">
+      <form>
+        <div class="modal-header">
+          <h5 class="modal-title" id="modalAgregarFamiliarLabel">Agregar/Editar Familiar</h5>
+          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+        </div>
+        <div class="modal-body">
+          <div class="row">
+            <div class="col-md-6 mb-3">
+              <label class="form-label">Fecha de Registro</label>
+              <input type="date" class="form-control" name="fechaRegistro" required>
+            </div>
+            <div class="col-md-6 mb-3">
+              <label class="form-label">Nro. Muestra</label>
+              <input type="text" class="form-control" name="numeroMuestra">
+            </div>
+            <div class="col-md-6 mb-3">
+              <label class="form-label">Nombre Completo</label>
+              <input type="text" class="form-control" name="nombre" required>
+            </div>
+            <div class="col-md-6 mb-3">
+              <label class="form-label">DNI</label>
+              <input type="text" class="form-control" name="dni">
+            </div>
+            <div class="col-md-6 mb-3">
+              <label class="form-label">Vínculo Familiar</label>
+              <select class="form-select" name="vinculo" required>
+                <option value="" disabled selected>Seleccionar...</option>
+                <option value="PADRE">Padre</option>
+                <option value="MADRE">Madre</option>
+                <option value="HERMANO_A">Hermano/a</option>
+                <option value="HIJO_A">Hijo/a</option>
+                <option value="OTRO">Otro</option>
+              </select>
+            </div>
+            <div class="col-md-6 mb-3">
+              <label class="form-label">Grupo Sanguíneo</label>
+              <select class="form-select" name="grupoSanguineo">
+                <option value="">Seleccionar...</option>
+                <option value="A_POSITIVO">A+</option>
+                <option value="A_NEGATIVO">A-</option>
+                <option value="B_POSITIVO">B+</option>
+                <option value="B_NEGATIVO">B-</option>
+                <option value="AB_POSITIVO">AB+</option>
+                <option value="AB_NEGATIVO">AB-</option>
+                <option value="O_POSITIVO">O+</option>
+                <option value="O_NEGATIVO">O-</option>
+              </select>
+            </div>
+          </div>
+          <hr>
+          <h6>Locus Clase I</h6>
+          <div class="row">
+            <div class="col-md-4 mb-3">
+              <label class="form-label">Locus A</label>
+              <div class="input-group">
+                <input type="text" class="form-control" name="a1" placeholder="A1">
+                <input type="text" class="form-control" name="a2" placeholder="A2">
+              </div>
+            </div>
+            <div class="col-md-4 mb-3">
+              <label class="form-label">Locus B</label>
+              <div class="input-group">
+                <input type="text" class="form-control" name="b1" placeholder="B1">
+                <input type="text" class="form-control" name="b2" placeholder="B2">
+              </div>
+            </div>
+            <div class="col-md-4 mb-3">
+              <label class="form-label">Locus C</label>
+              <div class="input-group">
+                <input type="text" class="form-control" name="c1" placeholder="C1">
+                <input type="text" class="form-control" name="c2" placeholder="C2">
+              </div>
+            </div>
+          </div>
+          <h6>Locus Clase II</h6>
+          <div class="row">
+            <div class="col-md-4 mb-3">
+              <label class="form-label">Locus DR</label>
+              <div class="input-group">
+                <input type="text" class="form-control" name="dr1" placeholder="DR1">
+                <input type="text" class="form-control" name="dr2" placeholder="DR2">
+              </div>
+            </div>
+            <div class="col-md-4 mb-3">
+              <label class="form-label">Locus DQA</label>
+              <div class="input-group">
+                <input type="text" class="form-control" name="dqa1_1" placeholder="DQA1">
+                <input type="text" class="form-control" name="dqa1_2" placeholder="DQA2">
+              </div>
+            </div>
+            <div class="col-md-4 mb-3">
+              <label class="form-label">Locus DQB</label>
+              <div class="input-group">
+                <input type="text" class="form-control" name="dqb1_1" placeholder="DQB1">
+                <input type="text" class="form-control" name="dqb1_2" placeholder="DQB2">
+              </div>
+            </div>
+            <div class="col-md-4 mb-3">
+              <label class="form-label">Locus DPA</label>
+              <div class="input-group">
+                <input type="text" class="form-control" name="dpa1_1" placeholder="DPA1">
+                <input type="text" class="form-control" name="dpa1_2" placeholder="DPA2">
+              </div>
+            </div>
+            <div class="col-md-4 mb-3">
+              <label class="form-label">Locus DPB</label>
+              <div class="input-group">
+                <input type="text" class="form-control" name="dpb1_1" placeholder="DPB1">
+                <input type="text" class="form-control" name="dpb1_2" placeholder="DPB2">
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cerrar</button>
+          <button type="submit" class="btn btn-primary">Guardar</button>
+        </div>
+      </form>
+    </div>
+  </div>
+</div>

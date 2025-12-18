@@ -1,0 +1,51 @@
+<div class="container-fluid px-4">
+    <h1 class="mt-4">Carga de DSA</h1>
+    <ol class="breadcrumb mb-4">
+        <li class="breadcrumb-item"><a href="index.html">Dashboard</a></li>
+        <li class="breadcrumb-item active">Carga de Reportes</li>
+        <li class="breadcrumb-item active">Carga DSA</li>
+    </ol>
+
+    <!-- Contenedor de la tarjeta principal -->
+    <div class="card mb-4">
+        <div class="card-header">
+            <i class="fas fa-file-arrow-up me-1"></i>
+            Subir archivo de reporte DSA (.xlsx)
+        </div>
+        <div class="card-body">
+            
+            <!-- Contenedor para las alertas (igual que en tus otros módulos) -->
+            <div id="formAlertsDSA" class="mb-3"></div>
+
+            <!-- Formulario de Carga -->
+            <form id="form-carga-dsa" novalidate>
+                
+                <div class="alert alert-info" role="alert">
+                    <h5 class="alert-heading">¡Información Importante!</h5>
+                    <p>Seleccioná el archivo Excel (formato .xlsx) exportado del sistema de DSA.</p>
+                    <hr>
+                    <p class="mb-0"><strong>Requisito:</strong> El sistema buscará un paciente en la base de datos que coincida con el "Sample ID" del archivo (ej: `46 OZAN`). Por favor, asegurate de que el paciente ya exista en el sistema antes de subir el reporte.</p>
+                </div>
+
+                <div class="mb-3">
+                    <label for="dsa-file-input" class="form-label fw-bold">Archivo de Reporte DSA</label>
+                    <input class="form-control" type="file" id="dsa-file-input" accept=".xlsx, application/vnd.openxmlformats-officedocument.spreadsheetml.sheet" required>
+                    <div class="invalid-feedback">Por favor, seleccioná un archivo .xlsx</div>
+                </div>
+                
+                <hr>
+
+                <button type="submit" class="btn btn-primary" id="btn-subir-dsa">
+                    <!-- Este span es para el texto -->
+                    <span class="btn-text">
+                        <i class="fas fa-upload me-2"></i>Cargar y Procesar Reporte
+                    </span>
+                    <!-- Este span es para el spinner de carga -->
+                    <span class="btn-spinner spinner-border spinner-border-sm" role="status" aria-hidden="true" style="display: none;"></span>
+                </button>
+            </form>
+
+        </div>
+    </div>
+</div>
+

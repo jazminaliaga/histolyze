@@ -1,0 +1,82 @@
+/* Paleta de colores de Histolyze definida como variables CSS */
+:root {
+  --color-bg: #e7ebeb;          /* White smoke - Fondo principal */
+  --color-primary: #174c65;      /* Indigo dye - Navbar y elementos principales */
+  --color-secondary: #2e6d81;    /* Cerulean - Botones primarios y acentos */
+  --color-accent: #37cbbc;        /* Turquoise - Acentos y estados activos */
+  --color-link: #247f92;         /* Blue (Munsell) - Enlaces */
+}
+
+/* 1. Aplicamos el color de fondo a toda la aplicación */
+body {
+  background-color: var(--color-bg);
+}
+
+/* 2. Estilos para la Barra de Navegación (Navbar) */
+.navbar.bg-primary {
+  background-color: var(--color-primary) !important;
+}
+
+/* 3. Estilos para los Botones Principales */
+.btn-primary {
+  background-color: var(--color-secondary);
+  border-color: var(--color-secondary);
+}
+
+.btn-primary:hover {
+  background-color: var(--color-primary); /* Un tono más oscuro al pasar el mouse */
+  border-color: var(--color-primary);
+}
+
+/* Botones de éxito (como "Agregar") usarán el color de acento */
+.btn-success {
+    background-color: var(--color-accent);
+    border-color: var(--color-accent);
+    color: var(--color-primary); /* Texto oscuro para mejor contraste */
+}
+.btn-success:hover {
+    opacity: 0.9;
+    color: var(--color-primary);
+}
+
+/* Botones de información (como "Ver Perfil") */
+.btn-info {
+    background-color: var(--color-link);
+    border-color: var(--color-link);
+}
+
+
+/* 4. Estilos para el Menú Lateral (Sidebar) */
+.sidebar {
+    background-color: #ffffff; /* Un blanco puro para que resalte del fondo */
+    border-right: 1px solid #ddd;
+}
+
+.sidebar .nav-link {
+  color: var(--color-secondary);
+  font-weight: 500;
+}
+
+.sidebar .nav-link:hover {
+  color: var(--color-primary);
+}
+
+/* Estilo para el enlace activo en el sidebar */
+.sidebar .nav-link.active {
+  color: var(--color-primary);
+  background-color: rgba(55, 203, 188, 0.15); /* Fondo suave con el color de acento */
+  border-left: 4px solid var(--color-accent);
+}
+
+/* 5. Estilos para el Acordeón del Perfil del Paciente */
+.accordion-button {
+    font-weight: 600;
+    color: var(--color-primary);
+}
+.accordion-button:not(.collapsed) {
+    background-color: rgba(46, 109, 129, 0.1);
+    color: var(--color-primary);
+}
+.hidden {
+    display: none;
+}

@@ -1,0 +1,316 @@
+<div class="container-fluid px-4">
+    <h1 class="mt-4">Alta de Paciente</h1>
+    <ol class="breadcrumb mb-4">
+        <li class="breadcrumb-item"><a href="index.html">Dashboard</a></li>
+        <li class="breadcrumb-item active">Pacientes</li>
+        <li class="breadcrumb-item active">Alta de Paciente</li>
+    </ol>
+    <div id="formAlerts" class="mb-3"></div>
+
+    <ul class="nav nav-tabs" id="pacienteTabs" role="tablist">
+        <li class="nav-item" role="presentation">
+            <button class="nav-link active" id="datos-tab" data-bs-toggle="tab" data-bs-target="#datos" type="button"
+                role="tab">
+                Datos Personales
+            </button>
+        </li>
+        <li class="nav-item" role="presentation">
+            <button class="nav-link" id="antecedentes-tab" data-bs-toggle="tab" data-bs-target="#antecedentes"
+                type="button" role="tab">
+                Antecedentes
+            </button>
+        </li>
+    </ul>
+
+    <form id="formPaciente" novalidate>
+        <div class="tab-content p-3 border border-top-0" id="pacienteTabsContent">
+
+            <div class="tab-pane fade show active" id="datos" role="tabpanel" aria-labelledby="datos-tab">
+                <div class="row mb-3">
+                    <div class="col-md-6">
+                        <label for="nombre" class="form-label">Nombre</label>
+                        <input type="text" class="form-control" id="nombre" placeholder="Ingrese nombre" required
+                            pattern="[A-Za-zÀ-ÿ\s]+">
+                        <div class="invalid-feedback">Ingrese solo letras.</div>
+                    </div>
+                    <div class="col-md-6">
+                        <label for="apellido" class="form-label">Apellido</label>
+                        <input type="text" class="form-control" id="apellido" placeholder="Ingrese apellido" required
+                            pattern="[A-Za-zÀ-ÿ\s]+">
+                        <div class="invalid-feedback">Ingrese solo letras.</div>
+                    </div>
+                </div>
+
+                <div class="row mb-3">
+                    <div class="col-md-4">
+                        <label for="muestra" class="form-label">Nro muestra</label>
+                        <input type="text" class="form-control" id="muestra" placeholder="Ingrese número de muestra"
+                            required pattern="[A-Za-z0-9\s]+">
+                        <div class="invalid-feedback">Ingrese un número de muestra válido.</div>
+                    </div>
+                    <div class="col-md-4">
+                        <label for="dni" class="form-label">DNI</label>
+                        <input type="text" inputmode="numeric" class="form-control" id="dni" placeholder="Ingrese DNI"
+                            required pattern="\d{7,8}">
+                        <div class="invalid-feedback">Ingrese un DNI válido (7 u 8 números).</div>
+                    </div>
+                    <div class="col-md-4">
+                        <label for="fechaNacimiento" class="form-label">Fecha de Nacimiento</label>
+                        <input type="date" class="form-control" id="fechaNacimiento" required>
+                        <div class="invalid-feedback">Seleccione una fecha.</div>
+                    </div>
+                </div>
+
+                <div class="row mb-3">
+                    <div class="col-md-6">
+                        <label for="domicilio" class="form-label">Domicilio</label>
+                        <input type="text" class="form-control" id="domicilio" placeholder="Ingrese domicilio completo"
+                            required>
+                        <div class="invalid-feedback">Ingrese solo letras y números.</div>
+                    </div>
+                    <div class="col-md-6">
+                        <label for="telefono" class="form-label">Teléfono</label>
+                        <input type="text" inputmode="numeric" class="form-control" id="telefono"
+                            placeholder="Ingrese número de teléfono" required pattern="\d+">
+                        <div class="invalid-feedback">Ingrese solo números.</div>
+                    </div>
+                </div>
+
+                <div class="row mb-3">
+                    <div class="col-md-6">
+                        <label for="mutual" class="form-label">Mutual</label>
+                        <input type="text" class="form-control" id="mutual" placeholder="Ingrese mutual" required
+                            pattern="[A-Za-zÀ-ÿ\s]+">
+                        <div class="invalid-feedback">Ingrese una mutual válida.</div>
+                    </div>
+                    <div class="col-md-6">
+                        <label for="tx" class="form-label">Centro de Tx</label>
+                        <input type="text" class="form-control" id="tx" placeholder="Ingrese centro de tx" required
+                            pattern="[A-Za-zÀ-ÿ\s]+">
+                        <div class="invalid-feedback">Ingrese un centro de tx válido.</div>
+                    </div>
+                </div>
+
+                <div class="row mb-3">
+                    <div class="col-md-6">
+                        <label for="dialisis" class="form-label">Centro de Diálisis</label>
+                        <input type="text" class="form-control" id="dialisis" placeholder="Ingrese centro de diálisis"
+                            required pattern="[A-Za-zÀ-ÿ\s]+">
+                        <div class="invalid-feedback">Ingrese un centro de diálisis válido.</div>
+                    </div>
+                    <div class="col-md-6">
+                        <label for="medico" class="form-label">Médico solicitante</label>
+                        <input type="text" class="form-control" id="medico" placeholder="Ingrese médico solicitante"
+                            required pattern="[A-Za-zÀ-ÿ\s]+">
+                        <div class="invalid-feedback">Ingrese un médico válido.</div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="tab-pane fade" id="antecedentes" role="tabpanel" aria-labelledby="antecedentes-tab">
+                <div class="row mb-3">
+                    <div class="col-md-12">
+                        <label for="diagnostico" class="form-label">Diagnóstico</label>
+                        <input type="text" class="form-control" id="diagnostico" placeholder="Ingrese diagnóstico"
+                            required pattern="[A-Za-zÀ-ÿ\s]+">
+                        <div class="invalid-feedback">Ingrese un diagnóstico válido.</div>
+                    </div>
+                </div>
+
+                <div class="row mb-3">
+                    <div class="col-md-12">
+                        <label for="medicacion" class="form-label">Medicación</label>
+                        <input type="text" class="form-control" id="medicacion" placeholder="Ingrese medicación"
+                            required pattern="[A-Za-z0-9\s]+">
+                        <div class="invalid-feedback">Ingrese medicación válida.</div>
+                    </div>
+                </div>
+
+                <div class="row mb-3">
+                    <div class="col-md-4">
+                        <label for="fechaHemodialisis" class="form-label">Fecha comienzo hemodiálisis</label>
+                        <input type="date" class="form-control" id="fechaHemodialisis" required>
+                        <div class="invalid-feedback">Seleccione una fecha.</div>
+                    </div>
+
+                    <div class="col-md-4">
+                        <label class="form-label">Embarazos</label>
+                        <div>
+                            <div class="form-check form-check-inline">
+                                <input type="radio" id="embarazosSi" name="embarazos" value="si"
+                                    class="form-check-input" required>
+                                <label for="embarazosSi" class="form-check-label">Sí</label>
+                            </div>
+                            <div class="form-check form-check-inline">
+                                <input type="radio" id="embarazosNo" name="embarazos" value="no"
+                                    class="form-check-input" required>
+                                <label for="embarazosNo" class="form-check-label">No</label>
+                            </div>
+                        </div>
+                        <div class="invalid-feedback">Seleccione una opción.</div>
+                    </div>
+
+                    <div class="col-md-4">
+                        <label for="cantidadEmbarazos" class="form-label">Cantidad de embarazos</label>
+                        <input type="number" class="form-control" id="cantidadEmbarazos" placeholder="Ingrese cantidad"
+                            required pattern="\d+">
+                        <div class="invalid-feedback">Ingrese cantidad válida.</div>
+                    </div>
+                </div>
+
+                <div class="row mb-3">
+                    <div class="col-md-4">
+                        <label class="form-label">Transfusiones</label>
+                        <div>
+                            <div class="form-check form-check-inline">
+                                <input type="radio" id="transfusionesSi" name="transfusiones" value="si"
+                                    class="form-check-input" required>
+                                <label for="transfusionesSi" class="form-check-label">Sí</label>
+                            </div>
+                            <div class="form-check form-check-inline">
+                                <input type="radio" id="transfusionesNo" name="transfusiones" value="no"
+                                    class="form-check-input" required>
+                                <label for="transfusionesNo" class="form-check-label">No</label>
+                            </div>
+                        </div>
+                        <div class="invalid-feedback">Seleccione una opción.</div>
+                    </div>
+
+                    <div class="col-md-4">
+                        <label for="fechaTransfusiones" class="form-label">Fecha</label>
+                        <input type="date" class="form-control" id="fechaTransfusiones" required>
+                        <div class="invalid-feedback">Seleccione una fecha.</div>
+                    </div>
+                    <div class="col-md-6 mb-3">
+                        <label for="tipoTransfusion" class="form-label">Tipo de Transfusión</label>
+                        <select class="form-select" id="tipoTransfusion" name="tipoTransfusion" required>
+                            <option value="" selected disabled>Seleccionar un tipo...</option>
+                            <option value="CRIOPRECIPITADOS">Crioprecipitados</option>
+                            <option value="PLAQUETOFERESIS">Plaquetoferesis</option>
+                            <option value="PLASMAFERESIS">Plasmaferesis</option>
+                            <option value="SEDIMENTO_GLOBULAR">Sedimento Globular</option>
+                        </select>
+                        <div class="invalid-feedback">
+                            Por favor, seleccione un tipo de trasplante.
+                        </div>
+                    </div>
+                </div>
+
+                <div class="row mb-3">
+                    <div class="col-md-4">
+                        <label class="form-label">Trasplantes previos</label>
+                        <div>
+                            <div class="form-check form-check-inline">
+                                <input type="radio" id="trasplantesSi" name="trasplantes" value="si"
+                                    class="form-check-input" required>
+                                <label for="trasplantesSi" class="form-check-label">Sí</label>
+                            </div>
+                            <div class="form-check form-check-inline">
+                                <input type="radio" id="trasplantesNo" name="trasplantes" value="no"
+                                    class="form-check-input" required>
+                                <label for="trasplantesNo" class="form-check-label">No</label>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="col-md-4">
+                        <label for="pdTransfusiones" class="form-label">PD</label>
+                        <input type="text" class="form-control" id="pdTransfusiones"
+                            placeholder="Ingrese proceso de donación" required>
+                        <div class="invalid-feedback">Ingrese PD válido.</div>
+                    </div>
+
+                    <div class="col-md-4">
+                        <label for="fechaTrasplante" class="form-label">Fecha</label>
+                        <input type="date" class="form-control" id="fechaTrasplante" required>
+                        <div class="invalid-feedback">Seleccione una fecha.</div>
+                    </div>
+
+                    <div class="col-md-6 mb-3">
+                        <label for="tipoTrasplante" class="form-label">Tipo de Trasplante</label>
+                        <select class="form-select" id="tipoTrasplante" name="tipoTrasplante" required>
+                            <option value="" selected disabled>Seleccionar un tipo...</option>
+                            <option value="DONANTECADAVERICO">Donante cadavérico</option>
+                            <option value="DONANTEVIVO">Donante vivo</option>
+                        </select>
+                        <div class="invalid-feedback">
+                            Por favor, seleccione un tipo de trasplante.
+                        </div>
+                    </div>
+                </div>
+
+                <div class="row mb-3">
+                    <div class="col-md-12">
+                        <label class="form-label">HLA Donante</label>
+                        <div class="row g-2">
+                            <div class="col-md-3">
+                                <label class="form-label">A</label>
+                                <input type="text" class="form-control mb-1" id="hlaA1" placeholder="A1">
+                                <input type="text" class="form-control" id="hlaA2" placeholder="A2">
+                            </div>
+                            <div class="col-md-3">
+                                <label class="form-label">B</label>
+                                <input type="text" class="form-control mb-1" id="hlaB1" placeholder="B1">
+                                <input type="text" class="form-control" id="hlaB2" placeholder="B2">
+                            </div>
+                            <div class="col-md-3">
+                                <label class="form-label">C</label>
+                                <input type="text" class="form-control mb-1" id="hlaC1" placeholder="C1">
+                                <input type="text" class="form-control" id="hlaC2" placeholder="C2">
+                            </div>
+                            <div class="col-md-3">
+                                <label class="form-label">DR</label>
+                                <input type="text" class="form-control mb-1" id="hlaDR1" placeholder="DR1">
+                                <input type="text" class="form-control" id="hlaDR2" placeholder="DR2">
+                            </div>
+                        </div>
+
+                        <div class="row g-2 mt-2">
+                            <div class="col-md-3">
+                                <label class="form-label">DQA1</label>
+                                <input type="text" class="form-control mb-1" id="hlaDQA11" placeholder="DQA1-1">
+                                <input type="text" class="form-control" id="hlaDQA12" placeholder="DQA1-2">
+                            </div>
+                            <div class="col-md-3">
+                                <label class="form-label">DQB1</label>
+                                <input type="text" class="form-control mb-1" id="hlaDQB11" placeholder="DQB1-1">
+                                <input type="text" class="form-control" id="hlaDQB12" placeholder="DQB1-2">
+                            </div>
+                            <div class="col-md-3">
+                                <label class="form-label">DPA1</label>
+                                <input type="text" class="form-control mb-1" id="hlaDPA11" placeholder="DPA1-1">
+                                <input type="text" class="form-control" id="hlaDPA12" placeholder="DPA1-2">
+                            </div>
+                            <div class="col-md-3">
+                                <label class="form-label">DPB1</label>
+                                <input type="text" class="form-control mb-1" id="hlaDPB11" placeholder="DPB1-1">
+                                <input type="text" class="form-control" id="hlaDPB12" placeholder="DPB1-2">
+                            </div>
+                        </div>
+                        <div class="row mt-3">
+                            <div class="col-md-3">
+                                <label for="grupoSanguineo" class="form-label">Grupo sanguíneo</label>
+                                <select class="form-select" id="grupoSanguineo" required>
+                                    <option selected disabled value="">Seleccionar...</option>
+                                    <option value="A_POSITIVO">A+</option>
+                                    <option value="A_NEGATIVO">A-</option>
+                                    <option value="B_POSITIVO">B+</option>
+                                    <option value="B_NEGATIVO">B-</option>
+                                    <option value="AB_POSITIVO">AB+</option>
+                                    <option value="AB_NEGATIVO">AB-</option>
+                                    <option value="O_POSITIVO">O+</option>
+                                    <option value="O_NEGATIVO">O-</option>
+                                </select>
+                                <div class="invalid-feedback">Seleccione un grupo sanguíneo.</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="mt-3">
+            <button type="submit" class="btn btn-primary">Guardar Paciente</button>
+        </div>
+    </form>
+</div>

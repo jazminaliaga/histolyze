@@ -1,0 +1,158 @@
+<div class="container-fluid px-4">
+    <h1 class="mt-4">Carga de HLA</h1>
+    <ol class="breadcrumb mb-4">
+        <li class="breadcrumb-item"><a href="index.html">Dashboard</a></li>
+        <li class="breadcrumb-item active">Carga de Reportes</li>
+        <li class="breadcrumb-item active">Carga HLA</li>
+    </ol>
+
+    <div class="card mb-4">
+        <div class="card-header">
+            <i class="fas fa-dna me-1"></i>
+            Cargar datos
+        </div>
+        <div class="card-body">
+            <div id="formAlertsHLA" class="mb-3"></div>
+
+            <form id="formHLA" novalidate>
+
+                <div class="mb-3 pb-3 border-bottom">
+                    <div class="row mb-3">
+                        <div class="col-md-6">
+                            <label for="searchDniHLA" class="form-label">Buscar por DNI</label>
+                            <input type="text" id="searchDniHLA" class="form-control" placeholder="Ingrese DNI...">
+                        </div>
+                        <div class="col-md-6">
+                            <label for="searchMuestraHLA" class="form-label">Buscar por Nro. Muestra</label>
+                            <input type="text" id="searchMuestraHLA" class="form-control"
+                                placeholder="Ingrese Nro. Muestra...">
+                        </div>
+                    </div>
+                    <div class="row mb-3 justify-content-center">
+                        <div class="col-md-4">
+                            <button type="button" id="btnBuscarPacienteHLA" class="btn btn-info w-100">Buscar
+                                Paciente</button>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-12">
+                            <div class="row align-items-center">
+                                <div class="col-md-5 d-flex align-items-center mb-2 mb-md-0"> <label
+                                        class="col-form-label fw-bold me-2">Paciente:</label>
+                                    <label id="formDisplayNombreHLA"
+                                        class="form-control-plaintext text-primary flex-grow-1">[Ninguno]</label>
+                                </div>
+                                <div class="col-md-3 d-flex align-items-center mb-2 mb-md-0">
+                                    <label class="col-form-label fw-bold me-2">DNI:</label>
+                                    <label id="formDisplayDniHLA"
+                                        class="form-control-plaintext text-muted small flex-grow-1">-</label>
+                                </div>
+                                <div class="col-md-4 d-flex align-items-center">
+                                    <label class="col-form-label fw-bold me-2">Nro. Muestra:</label>
+                                    <label id="formDisplayMuestraHLA"
+                                        class="form-control-plaintext text-muted small flex-grow-1">-</label>
+                                </div>
+                            </div>
+                            <input type="hidden" id="hiddenPacienteIdHLA">
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-6" style="display: none;">
+                    <label for="numeroMuestraHLA" class="form-label">Número de Muestra</label>
+                    <input type="text" class="form-control" id="numeroMuestraHLA" name="numeroMuestraHLA" readonly>
+                </div>
+
+                <div class="row mb-3">
+                    <div class="col-md-4">
+                        <label for="fechaHLA" class="form-label">Fecha Registro</label>
+                        <input type="date" class="form-control" id="fechaHLA" name="fechaRegistro" required>
+                        <div class="invalid-feedback">Seleccione una fecha.</div>
+                    </div>
+                    <div class="col-md-4">
+                        <label for="grupoSanguineoHLA" class="form-label">Grupo sanguíneo</label>
+                        <select class="form-select" id="grupoSanguineoHLA" name="grupoSanguineo" required>
+                            <option selected disabled value="">Seleccionar...</option>
+                            <option value="A_POSITIVO">A+</option>
+                            <option value="A_NEGATIVO">A-</option>
+                            <option value="B_POSITIVO">B+</option>
+                            <option value="B_NEGATIVO">B-</option>
+                            <option value="AB_POSITIVO">AB+</option>
+                            <option value="AB_NEGATIVO">AB-</option>
+                            <option value="O_POSITIVO">O+</option>
+                            <option value="O_NEGATIVO">O-</option>
+                        </select>
+                        <div class="invalid-feedback">Seleccione un grupo sanguíneo.</div>
+                    </div>
+                </div>
+
+                <hr>
+                <h6>Locus Clase I</h6>
+                <div class="row g-2 mb-3">
+                    <div class="col-md-4">
+                        <label class="form-label">Locus A</label>
+                        <div class="input-group">
+                            <input type="text" class="form-control" id="hlaA1H" name="locusA01" placeholder="A1">
+                            <input type="text" class="form-control" id="hlaA2H" name="locusA02" placeholder="A2">
+                        </div>
+                    </div>
+                    <div class="col-md-4">
+                        <label class="form-label">Locus B</label>
+                        <div class="input-group">
+                            <input type="text" class="form-control" id="hlaB1H" name="locusB01" placeholder="B1">
+                            <input type="text" class="form-control" id="hlaB2H" name="locusB02" placeholder="B2">
+                        </div>
+                    </div>
+                    <div class="col-md-4">
+                        <label class="form-label">Locus C</label>
+                        <div class="input-group">
+                            <input type="text" class="form-control" id="hlaC1H" name="locusC01" placeholder="C1">
+                            <input type="text" class="form-control" id="hlaC2H" name="locusC02" placeholder="C2">
+                        </div>
+                    </div>
+                </div>
+                <h6>Locus Clase II</h6>
+                <div class="row g-2">
+                    <div class="col-md-4">
+                        <label class="form-label">Locus DR</label>
+                        <div class="input-group">
+                            <input type="text" class="form-control" id="hlaDR1H" name="locusDR01" placeholder="DR1">
+                            <input type="text" class="form-control" id="hlaDR2H" name="locusDR02" placeholder="DR2">
+                        </div>
+                    </div>
+                    <div class="col-md-4">
+                        <label class="form-label">Locus DQA</label>
+                        <div class="input-group">
+                            <input type="text" class="form-control" id="hlaDQA11H" name="locusDQA01" placeholder="DQA1">
+                            <input type="text" class="form-control" id="hlaDQA12H" name="locusDQA02" placeholder="DQA2">
+                        </div>
+                    </div>
+                    <div class="col-md-4">
+                        <label class="form-label">Locus DQB</label>
+                        <div class="input-group">
+                            <input type="text" class="form-control" id="hlaDQB11H" name="locusDQB01" placeholder="DQB1">
+                            <input type="text" class="form-control" id="hlaDQB12H" name="locusDQB02" placeholder="DQB2">
+                        </div>
+                    </div>
+                    <div class="col-md-4">
+                        <label class="form-label">Locus DPA</label>
+                        <div class="input-group">
+                            <input type="text" class="form-control" id="hlaDPA11H" name="locusDPA01" placeholder="DPA1">
+                            <input type="text" class="form-control" id="hlaDPA12H" name="locusDPA02" placeholder="DPA2">
+                        </div>
+                    </div>
+                    <div class="col-md-4">
+                        <label class="form-label">Locus DPB</label>
+                        <div class="input-group">
+                            <input type="text" class="form-control" id="hlaDPB11H" name="locusDPB01" placeholder="DPB1">
+                            <input type="text" class="form-control" id="hlaDPB12H" name="locusDPB02" placeholder="DPB2">
+                        </div>
+                    </div>
+                </div>
+
+                <div class="mt-4">
+                    <button type="submit" class="btn btn-primary">Guardar HLA</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>

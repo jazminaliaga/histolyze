@@ -1,0 +1,83 @@
+<nav class="bg-light sidebar vh-100 p-3">
+    <ul class="nav flex-column">
+
+        <li class="nav-item">
+            <a class="nav-link" href="index.html">
+                <span data-feather="home"></span>
+                Inicio
+            </a>
+        </li>
+
+        <!-- Pacientes (submenú) -->
+        <li class="nav-item mb-2">
+            <a class="nav-link" data-bs-toggle="collapse" href="#collapsePacientes" role="button" aria-expanded="false"
+                aria-controls="collapsePacientes">
+                Pacientes
+            </a>
+            <div class="collapse ms-3" id="collapsePacientes">
+                <ul class="nav flex-column">
+                    <li class="nav-item mb-1">
+                        <a class="nav-link" href="#" data-module="pacientes_alta">Alta</a>
+                    </li>
+                    <li class="nav-item mb-1">
+                        <a class="nav-link" href="#" data-module="pacientes_historial">Historial</a>
+                    </li>
+                </ul>
+            </div>
+        </li>
+
+
+        <!-- Carga de Resultados (submenú) -->
+        <li class="nav-item mb-2">
+            <a class="nav-link" data-bs-toggle="collapse" href="#collapseCarga" role="button" aria-expanded="false"
+                aria-controls="collapseCarga">
+                Carga de Resultados
+            </a>
+            <div class="collapse ms-3" id="collapseCarga">
+                <ul class="nav flex-column">
+                    <li class="nav-item mb-1">
+                        <a class="nav-link" href="#" data-module="carga_hla">HLA</a>
+                    </li>
+                    <li class="nav-item mb-1">
+                        <a class="nav-link" href="#" data-module="carga_dsa">DSA</a>
+                    </li>
+                    <li class="nav-item mb-1">
+                        <a class="nav-link" href="#" data-module="carga_crossmatch_panel">CROSS-MATCH contra panel</a>
+                    </li>
+                </ul>
+            </div>
+        </li>
+
+        <!-- Crossmatch Virtual -->
+        <li class="nav-item mb-2">
+            <a class="nav-link" href="#" data-module="crossmatch_virtual">Crossmatch Virtual</a>
+        </li>
+
+        <!-- Informes (submenú) -->
+        <li class="nav-item mb-2">
+            <a class="nav-link" data-bs-toggle="collapse" href="#collapseInformes" role="button" aria-expanded="false"
+                aria-controls="collapseInformes">
+                Informes
+            </a>
+            <div class="collapse ms-3" id="collapseInformes">
+                <ul class="nav flex-column">
+                    <li class="nav-item mb-1">
+                        <a class="nav-link" href="#" data-module="informe_familiar">Familiar</a>
+                    </li>
+                    <li class="nav-item mb-1">
+                        <a class="nav-link" href="#" data-module="informe_hla">HLA</a>
+                    </li>
+                    <li class="nav-item mb-1">
+                        <a class="nav-link" href="#" data-module="informe_dsa">DSA</a>
+                    </li>
+                </ul>
+            </div>
+        </li>
+
+        <!-- Crear usuarios -->
+        <li class="nav-item mb-2">
+            <a class="nav-link" id="nav-link-usuarios" data-module="crear_usuarios" href="#">Gestionar Usuarios</a>
+        </li>
+
+    </ul>
+</nav>

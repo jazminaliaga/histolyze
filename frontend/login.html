@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Login - Histolyze</title>
+  <link rel="stylesheet" href="assets/css/bootstrap.min.css">
+  <link rel="stylesheet" href="assets/css/custom.css"> 
+</head>
+
+<body class="d-flex justify-content-center align-items-center vh-100 bg-light">
+  <div class="card p-4" style="width: 350px;">
+
+    <div class="text-center mb-4">
+      <img src="assets/img/logo.png" alt="Logo Histolyze" style="width: 100px;">
+    </div>
+
+    <h3 class="mb-3 text-center">Iniciar Sesión</h3>
+    <form id="loginForm" novalidate>
+      <div class="mb-3">
+        <label for="dni" class="form-label">DNI</label>
+        <input type="text" class="form-control" id="dni" name="dni" required pattern="^[0-9]{7,8}$">
+      </div>
+      <div class="mb-3">
+        <label for="password" class="form-label">Contraseña</label>
+        <input type="password" class="form-control" id="password" name="password" required>
+      </div>
+      <button type="submit" class="btn btn-primary w-100">Ingresar</button>
+    </form>
+    <div id="loginAlert" class="mt-3"></div>
+  </div>
+
+  <script type="module" src="./assets/js/login.js"></script>
+</body>
+
+</html>

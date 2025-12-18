@@ -1,0 +1,106 @@
+<div class="container-fluid px-4">
+    <h1 class="mt-4">Carga de crossmatch contra panel</h1>
+    <ol class="breadcrumb mb-4">
+        <li class="breadcrumb-item"><a href="index.html">Dashboard</a></li>
+        <li class="breadcrumb-item active">Carga de Reportes</li>
+        <li class="breadcrumb-item active">Carga Crossmatch</li>
+    </ol>
+
+    <div class="card mb-4">
+        <div class="card-header">
+            <i class="fas fa-vial me-1"></i>
+            Cargar datos
+        </div>
+        <div class="card-body">
+            <div id="formAlertsCrossmatch" class="mb-3"></div>
+
+            <form id="formCrossmatch" novalidate>
+
+                <div class="mb-3 pb-3 border-bottom">
+                    <div class="row mb-3">
+                        <div class="col-md-6">
+                            <label for="searchDniCM" class="form-label">Buscar por DNI</label>
+                            <input type="text" id="searchDniCM" class="form-control" placeholder="Ingrese DNI...">
+                        </div>
+                        <div class="col-md-6">
+                            <label for="searchMuestraCM" class="form-label">Buscar por Nro. Muestra</label>
+                            <input type="text" id="searchMuestraCM" class="form-control"
+                                placeholder="Ingrese Nro. Muestra...">
+                        </div>
+                    </div>
+                    <div class="row mb-3 justify-content-center">
+                        <div class="col-md-4">
+                            <button type="button" id="btnBuscarPacienteCM" class="btn btn-info w-100">Buscar
+                                Paciente</button>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-12">
+                            <div class="row align-items-center">
+                                <div class="col-md-5 d-flex align-items-center mb-2 mb-md-0">
+                                    <label class="col-form-label fw-bold me-2">Paciente:</label>
+                                    <label id="formDisplayNombreCM"
+                                        class="form-control-plaintext text-primary flex-grow-1">[Ninguno]</label>
+                                </div>
+                                <div class="col-md-3 d-flex align-items-center mb-2 mb-md-0">
+                                    <label class="col-form-label fw-bold me-2">DNI:</label>
+                                    <label id="formDisplayDniCM"
+                                        class="form-control-plaintext text-muted small flex-grow-1">-</label>
+                                </div>
+                                <div class="col-md-4 d-flex align-items-center">
+                                    <label class="col-form-label fw-bold me-2">Nro. Muestra:</label>
+                                    <label id="formDisplayMuestraCM"
+                                        class="form-control-plaintext text-muted small flex-grow-1">-</label>
+                                </div>
+                            </div>
+                            <input type="hidden" id="hiddenPacienteIdCM">
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-3" style="display: none;">
+                    <label for="numeroMuestraCrossmatch" class="form-label">Número de Muestra</label>
+                    <input type="text" class="form-control" id="numeroMuestraCrossmatch" name="numeroMuestraCrossmatch"
+                        readonly>
+                </div>
+
+                <div class="row mb-3">
+                    <div class="col-md-3">
+                        <label for="fecha" class="form-label">Fecha</label>
+                        <input type="date" class="form-control" id="fecha" name="fecha" required>
+                        <div class="invalid-feedback">Seleccione una fecha.</div>
+                    </div>
+                    <div class="col-md-2">
+                        <label for="antiHla1" class="form-label">Anti-HLA I (%)</label>
+                        <input type="number" class="form-control" id="antiHla1" name="antiHla1" min="0" max="100"
+                            placeholder="%" required>
+                        <div class="invalid-feedback">Ingrese un valor entre 0 y 100.</div>
+                    </div>
+                    <div class="col-md-2">
+                        <label for="antiHla2" class="form-label">Anti-HLA II (%)</label>
+                        <input type="number" class="form-control" id="antiHla2" name="antiHla2" min="0" max="100"
+                            placeholder="%" required>
+                        <div class="invalid-feedback">Ingrese un valor entre 0 y 100.</div>
+                    </div>
+                    <div class="col-md-3">
+                        <label for="resultado" class="form-label">Resultado Anti MICA</label>
+                        <select class="form-select" id="resultado" name="resultado" required>
+                            <option value="" disabled selected>Seleccionar...</option>
+                            <option value="POSITIVO">Positivo</option>
+                            <option value="NEGATIVO">Negativo</option>
+                        </select>
+                        <div class="invalid-feedback">Seleccione un resultado.</div>
+                    </div>
+                </div>
+
+                <div class="mb-3">
+                    <label for="anticuerposNoConfirmados" class="form-label">Anticuerpos Específicos no
+                        Confirmados</label>
+                    <textarea class="form-control" id="anticuerposNoConfirmados" name="anticuerposNoConfirmados"
+                        rows="3" placeholder="Describa los anticuerpos no confirmados..." required></textarea>
+                    <div class="invalid-feedback">Complete este campo.</div>
+                </div>
+                <button type="submit" class="btn btn-primary">Guardar Crossmatch</button>
+            </form>
+        </div>
+    </div>
+</div>
