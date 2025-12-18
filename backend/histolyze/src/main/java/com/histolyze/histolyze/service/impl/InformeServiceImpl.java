@@ -6,6 +6,7 @@ import com.histolyze.histolyze.repository.*;
 import com.histolyze.histolyze.service.InformeService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import com.histolyze.histolyze.dto.DsaEstudioDTO;
 
 import java.util.Collections;
 import java.util.List;
@@ -34,24 +35,30 @@ public class InformeServiceImpl implements InformeService {
     @Autowired
     private FamiliarRepository familiarRepository;
 
-    @Override // Añadimos @Override
+    @Override
     public InformeDsaResponseDTO getDatosInformeDsa(String dni) {
 
-        // 1. Buscar al paciente por DNI
+        // 1. Buscar Paciente
         Paciente paciente = pacienteRepository.findByDni(dni)
                 .orElseThrow(() -> new RuntimeException("Paciente no encontrado con DNI: " + dni));
 
-        // 2. Encontrar el ÚLTIMO estudio DSA de ese paciente
+        // 2. Buscar último DSA
         DSA ultimoDsa = dsaRepository.findByPacienteOrderByFechaDesc(paciente)
                 .stream()
                 .findFirst()
                 .orElseThrow(() -> new RuntimeException("No se encontraron estudios DSA para el paciente: " + dni));
 
-        // 3. Traer todos los anticuerpos para ESE estudio
+        // 3. Traer anticuerpos
         List<AnticuerpoAntiHLA> anticuerpos = anticuerpoRepository.findByDsa(ultimoDsa);
 
-        // 4. Armar el DTO de respuesta que espera el frontend
-        DsaSimpleDTO dsaDto = null;
+        // 4. Armar el DTO de cabecera (USANDO LA NUEVA CLASE)
+        DsaEstudioDTO dsaDto = new DsaEstudioDTO();
+        dsaDto.setNombrePaciente(ultimoDsa.getNombrePaciente());
+        dsaDto.setDniPaciente(ultimoDsa.getDniPaciente());
+        dsaDto.setMedicoSolicitante(ultimoDsa.getMedicoSolicitante());
+        dsaDto.setNumeroMuestra(ultimoDsa.getNumeroMuestra());
+        dsaDto.setFecha(ultimoDsa.getFecha());
+        dsaDto.setObservaciones(ultimoDsa.getObservaciones());
 
         return new InformeDsaResponseDTO(dsaDto, anticuerpos);
     }

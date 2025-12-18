@@ -8,9 +8,9 @@ import java.util.List;
 @Data
 @AllArgsConstructor
 public class InformeDsaResponseDTO {
-    // Corresponde a la clave "dsa" del mock
-    private DsaSimpleDTO dsa;
+    // Usamos el nuevo DTO para la cabecera
+    private DsaEstudioDTO dsa;
 
-    // Corresponde a la clave "anticuerpos" del mock
+    // Mantenemos la lista de entidades o DTOs para los anticuerpos
     private List<AnticuerpoAntiHLA> anticuerpos;
 }

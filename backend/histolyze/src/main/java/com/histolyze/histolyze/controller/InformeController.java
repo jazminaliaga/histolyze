@@ -6,8 +6,12 @@ import com.histolyze.histolyze.dto.InformeFamiliarResponseDTO;
 import com.histolyze.histolyze.service.InformeService;
 import com.histolyze.histolyze.service.PdfService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpHeaders;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+
+import java.util.HashMap;
 import java.util.Map;
 import org.springframework.http.HttpStatus;
 
@@ -120,25 +124,20 @@ public class InformeController {
     @GetMapping("/descargar-pdf/dsa/{dni}")
     public ResponseEntity<byte[]> descargarInformeDsa(@PathVariable String dni) {
 
-        // 1. Reutilizamos la lógica existente para buscar los datos
+        // 1. Obtener datos
         InformeDsaResponseDTO datos = informeService.getDatosInformeDsa(dni);
 
-        // NOTA: Asegúrate de que datos.getDsaDto() no sea null en tu servicio,
-        // actualmente en tu código vi que estaba en null. Debes mapearlo bien.
-        // Si usas la entidad directa para el PDF, mapeala aquí a un Map.
-
-        // 2. Preparamos el mapa de variables para Thymeleaf
+        // 2. Preparamos el mapa
         Map<String, Object> variables = new HashMap<>();
-        // Aquí asumo que tu DTO ya tiene los datos, o usas 'ultimoDsa' del servicio
-        variables.put("dsa", datos.getDsaDto());
-        variables.put("anticuerpos", datos.getAnticuerpos());
-        // Podrías pasar observaciones guardadas si las tienes en el DTO
-        variables.put("observaciones", datos.getDsaDto() != null ? datos.getDsaDto().getObservaciones() : "");
 
-        // 3. Generamos el PDF
+        variables.put("dsa", datos.getDsa());
+        variables.put("anticuerpos", datos.getAnticuerpos());
+
+        variables.put("observaciones", datos.getDsa() != null ? datos.getDsa().getObservaciones() : "");
+
+        // 3. Generar PDF
         byte[] pdfBytes = pdfService.generarPdf("reporte_dsa", variables);
 
-        // 4. Devolvemos el archivo al navegador
         return ResponseEntity.ok()
                 .header(HttpHeaders.CONTENT_DISPOSITION, "attachment; filename=informe_dsa_" + dni + ".pdf")
                 .contentType(MediaType.APPLICATION_PDF)

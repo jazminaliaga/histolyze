@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <style>
+        body { font-family: sans-serif; font-size: 12px; }
+        .header { text-align: center; margin-bottom: 20px; }
+        .table { width: 100%; border-collapse: collapse; margin-top: 10px; }
+        .table th, .table td { border: 1px solid #ddd; padding: 6px; text-align: left; }
+        .table th { background-color: #f2f2f2; }
+        .titulo { font-size: 18px; font-weight: bold; color: #0d6efd; }
+        .info-paciente { margin-bottom: 15px; border: 1px solid #ccc; padding: 10px; }
+    </style>
+</head>
+<body>
+
+<div class="header">
+    <h1 class="titulo">Informe de Anticuerpos Anti-HLA (DSA)</h1>
+    <p>Laboratorio de Histocompatibilidad</p>
+</div>
+
+<div class="info-paciente">
+    <h3>Datos del Paciente</h3>
+    <p><strong>Nombre:</strong> <span th:text="${dsa.nombrePaciente}">Nombre</span></p>
+    <p><strong>DNI:</strong> <span th:text="${dsa.dniPaciente}">123456</span></p>
+    <p><strong>Fecha Muestra:</strong> <span th:text="${dsa.fecha}">01/01/2025</span></p>
+    <p><strong>Médico:</strong> <span th:text="${dsa.medicoSolicitante}">Dr. X</span></p>
+</div>
+
+<h3>Resultados</h3>
+<table class="table">
+    <thead>
+    <tr>
+        <th>Especificidad</th>
+        <th>MFI</th>
+        <th>Clase</th>
+        <th>Resultado</th>
+    </tr>
+    </thead>
+    <tbody>
+    <tr th:each="ac : ${anticuerpos}">
+        <td th:text="${ac.serologico}">A2</td>
+        <td th:text="${ac.mfi}">1500</td>
+        <td th:text="${ac.tipo}">Clase 1</td>
+        <td th:text="${ac.resultado}">Positivo</td>
+    </tr>
+    </tbody>
+</table>
+
+<div style="margin-top: 30px;">
+    <h4>Observaciones:</h4>
+    <p th:text="${observaciones}">Sin observaciones.</p>
+</div>
+
+</body>
+</html>

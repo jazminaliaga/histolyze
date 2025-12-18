@@ -307,33 +307,24 @@ export function initInformeHlaModule() {
       }
 
       const observaciones = inputObservaciones.value;
-      // El ID que guardamos en el DTO en el Paso 1
-      const idHla = datosActuales.paciente.idHla;
+      const idDsa = datosActuales.dsa.idDsa;
 
-      if (!idHla) {
-        showAlert(
-          "Error: No se pudo encontrar el ID del registro HLA para guardar.",
-          "danger"
-        );
-        return;
-      }
+      // Obtenemos el DNI del DOM para armar la URL
+      const dniPaciente = document.getElementById("viz-dni").textContent.trim();
 
       showLoader();
       try {
-        // 1. LLAMAMOS A LA NUEVA FUNCIÓN DE LA API
-        await guardarObservacionHlaAPI(idHla, observaciones);
-        showAlert("Observaciones guardadas con éxito.", "success");
+        // 1. GUARDAR OBSERVACIONES (Igual que antes)
+        await guardarObservacionDsaAPI(idDsa, observaciones);
+        showAlert("Observaciones guardadas. Descargando PDF...", "success");
 
-        // 2. SIMULAMOS LA DESCARGA
-        console.log(
-          "Observaciones HLA guardadas, iniciando descarga simulada..."
-        );
-        alert(
-          "Observaciones guardadas. La descarga real del PDF se implementará con JasperReports."
-        );
+        // 2. DESCARGA REAL (Esta es la línea nueva)
+        // Redirigimos al navegador a la URL de descarga del backend
+        const urlDescarga = `http://localhost:8080/api/informes/descargar-pdf/dsa/${dniPaciente}`;
+        window.location.href = urlDescarga;
       } catch (err) {
         console.error(err);
-        showAlert(`Error al guardar observaciones: ${err.message}`, "danger");
+        showAlert(`Error: ${err.message}`, "danger");
       } finally {
         hideLoader();
       }
