@@ -89,11 +89,3 @@ Simplemente abre el archivo `frontend/index.html` en tu navegador web.
 ```
 
 ---
-
-## 👥 Equipo de Desarrollo
-
-* **Aliaga, Jazmín** - Coordinación / Backend / Frontend
-* **Huaman, Michael** - Backend / Infra
-* **Lucero, Abigail**
-* **Moro, Iriel** - Backend / Frontend
-* **Redolfi, Bruno** - Backend / Infra
