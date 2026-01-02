@@ -25,7 +25,7 @@
     <div id="report-visualizer" class="card mb-4 hidden">
         <div class="card-header"><i class="fas fa-eye me-1"></i> Visualización del Informe Familiar</div>
         <div class="card-body">
-            
+
             <div class="patient-info mb-3 p-3 bg-light border rounded">
                 <p><strong>Paciente:</strong> <span id="viz-paciente"></span></p>
             </div>
@@ -35,7 +35,14 @@
                 <table class="table table-bordered table-sm" id="tabla-familiar-abc">
                     <thead>
                         <tr class="table-light">
-                            <th></th><th></th><th>A</th><th>A</th><th>B</th><th>B</th><th>C</th><th>C</th>
+                            <th></th>
+                            <th></th>
+                            <th>A</th>
+                            <th>A</th>
+                            <th>B</th>
+                            <th>B</th>
+                            <th>C</th>
+                            <th>C</th>
                         </tr>
                     </thead>
                     <tbody></tbody>
@@ -47,19 +54,31 @@
                 <table class="table table-bordered table-sm" id="tabla-familiar-drq">
                     <thead>
                         <tr class="table-light">
-                            <th></th><th></th><th>DRB1</th><th>DRB1</th><th>DQA1</th><th>DQA1</th><th>DQB1</th><th>DQB1</th><th>DPA1</th><th>DPA1</th><th>DPB1</th><th>DPB1</th>
+                            <th></th>
+                            <th></th>
+                            <th>DRB1</th>
+                            <th>DRB1</th>
+                            <th>DQA1</th>
+                            <th>DQA1</th>
+                            <th>DQB1</th>
+                            <th>DQB1</th>
+                            <th>DPA1</th>
+                            <th>DPA1</th>
+                            <th>DPB1</th>
+                            <th>DPB1</th>
                         </tr>
                     </thead>
                     <tbody></tbody>
                 </table>
             </div>
-            
+
             <hr>
-            <h5 class="mt-3">Observaciones / Nota</h5>
-            <textarea id="inputObservaciones" class="form-control" rows="4" placeholder="Escriba aquí las notas (ej: El paciente presenta ambigüedad...)"></textarea>
-            
+            <h5 class="mt-3">Agregar Observaciones</h5>
+            <textarea id="inputObservaciones" class="form-control" rows="4"
+                placeholder="Escriba aquí las notas adicionales que aparecerán en el PDF final..."></textarea>
+
             <button id="btnDescargarPDF" class="btn btn-success mt-3">
-                <i class="fas fa-download me-1"></i> Descargar PDF (Simulado)
+                <i class="fas fa-download me-1"></i> Descargar PDF
             </button>
         </div>
     </div>

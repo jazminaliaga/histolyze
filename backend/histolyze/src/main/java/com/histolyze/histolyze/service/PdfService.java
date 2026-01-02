@@ -1,42 +1,42 @@
 package com.histolyze.histolyze.service;
 
 import com.openhtmltopdf.pdfboxout.PdfRendererBuilder;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.thymeleaf.TemplateEngine;
 import org.thymeleaf.context.Context;
-import org.thymeleaf.spring6.SpringTemplateEngine; // O spring5 según tu versión
 
 import java.io.ByteArrayOutputStream;
+import java.io.IOException;
 import java.util.Map;
 
 @Service
 public class PdfService {
 
-    private final SpringTemplateEngine templateEngine;
+    @Autowired
+    private TemplateEngine templateEngine;
 
-    public PdfService(SpringTemplateEngine templateEngine) {
-        this.templateEngine = templateEngine;
-    }
-
-    public byte[] generarPdf(String templateName, Map<String, Object> datos) {
-        // 1. Contexto de Thymeleaf (las variables que van al HTML)
+    public byte[] generarPdf(String templateName, Map<String, Object> variables) {
+        // 1. Crear el contexto de Thymeleaf e inyectar las variables
         Context context = new Context();
-        context.setVariables(datos);
+        context.setVariables(variables);
 
-        // 2. Renderizar HTML a String
-        String html = templateEngine.process(templateName, context);
+        // 2. Procesar el HTML: Thymeleaf reemplaza los th:text con los datos reales
+        // Nota: Asegúrate que tus templates estén en src/main/resources/templates/pdf/
+        String html = templateEngine.process("pdf/" + templateName, context);
 
-        // 3. Convertir HTML a PDF
+        // 3. Convertir ese HTML a PDF usando OpenHTMLtoPDF
         try (ByteArrayOutputStream os = new ByteArrayOutputStream()) {
             PdfRendererBuilder builder = new PdfRendererBuilder();
-            builder.useFastMode(); // Opcional, mejora rendimiento
-            // Importante: Asegura que el HTML sea XHTML válido o usa Jsoup para limpiar si es necesario
-            builder.withHtmlContent(html, "");
+            builder.useFastMode(); // Mejora el rendimiento
+            // Si tienes imágenes locales, aquí se configura la base URL, por ahora null
+            builder.withHtmlContent(html, null);
             builder.toStream(os);
             builder.run();
 
             return os.toByteArray();
-        } catch (Exception e) {
-            throw new RuntimeException("Error al generar PDF: " + e.getMessage(), e);
+        } catch (IOException e) {
+            throw new RuntimeException("Error al generar el PDF del informe: " + templateName, e);
         }
     }
 }

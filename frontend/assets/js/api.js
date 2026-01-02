@@ -231,3 +231,39 @@ export function getHlaByDonanteId(donorId) {
   // CORREGIDO: Usamos Path Variable (como espera el Controller) en lugar de Query Param
   return fetchAPI(`/crossmatch/donante/${donorId}/hla`);
 }
+
+// Agrega esto en api.js
+export async function downloadPdfAPI(url, filename) {
+  // CORRECCIÓN: Usamos la función getToken() importada de auth.js
+  // para asegurarnos de usar la clave correcta ("authToken")
+  const token = getToken(); 
+  
+  if (!token) {
+    throw new Error("No hay token de autenticación. Inicie sesión nuevamente.");
+  }
+
+  const response = await fetch(url, {
+    method: "GET",
+    headers: {
+      "Authorization": `Bearer ${token}` 
+    }
+  });
+
+  if (!response.ok) {
+    // Intentamos leer el error del backend si existe
+    const errorText = await response.text();
+    throw new Error(`Error al descargar PDF (${response.status}): ${errorText}`);
+  }
+
+  const blob = await response.blob();
+  const blobUrl = window.URL.createObjectURL(blob);
+  
+  const a = document.createElement("a");
+  a.href = blobUrl;
+  a.download = filename;
+  document.body.appendChild(a);
+  a.click();
+  
+  document.body.removeChild(a);
+  window.URL.revokeObjectURL(blobUrl);
+}

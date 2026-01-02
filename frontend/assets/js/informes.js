@@ -1,6 +1,6 @@
-// 1. IMPORTAMOS LAS FUNCIONES DE LA API, NO LOS MOCKS
 import {
   getInformeDsaAPI,
+  downloadPdfAPI,
   guardarObservacionDsaAPI,
   getInformeFamiliarAPI,
   getInformeHlaAPI,
@@ -16,26 +16,19 @@ import { showLoader, hideLoader } from "./loader.js";
 // ==========================================================
 export function initInformeDsaModule() {
   const btnBuscar = document.getElementById("btnBuscarInforme");
-  const btnDescargarPDF = document.getElementById("btnDescargarPDF");
+  const btnDescargar = document.getElementById("btnDescargarPDF");
   const reportVisualizer = document.getElementById("report-visualizer");
-
-  const vizPaciente = document.getElementById("viz-paciente");
-  const vizDni = document.getElementById("viz-dni");
-  const vizMuestra = document.getElementById("viz-muestra");
-  const vizMedico = document.getElementById("viz-medico");
   const inputObservaciones = document.getElementById("inputObservaciones");
+  
   const tablaClase1Body = document.querySelector("#tabla-clase1 tbody");
   const tablaClase2Body = document.querySelector("#tabla-clase2 tbody");
 
   let datosActuales = null;
 
+  // 1. EVENTO BUSCAR
   if (btnBuscar) {
-    // Convertido a ASYNC
-    btnBuscar.addEventListener("click", async () => {
+    btnBuscar.onclick = async () => {
       const queryDni = document.getElementById("inputDni")?.value;
-      const queryMuestra = document.getElementById("inputMuestra")?.value;
-
-      // Usaremos DNI por ahora (como definimos en el backend)
       if (!queryDni) {
         showAlert("Por favor, ingrese un DNI para buscar.", "warning");
         return;
@@ -44,84 +37,93 @@ export function initInformeDsaModule() {
       showLoader();
       try {
         const data = await getInformeDsaAPI(queryDni);
+        datosActuales = data;
         cargarDatosVisualizacionDSA(data);
-        inputObservaciones.value = data.dsa.observaciones || "";
+        // CORREGIDO: Accedemos directo a la raíz, ya no a data.dsa
+        if (inputObservaciones) inputObservaciones.value = data.observaciones || ""; 
       } catch (err) {
         console.error(err);
-        showAlert(`Error al buscar el informe: ${err.message}`, "danger");
-        reportVisualizer.classList.add("hidden");
+        showAlert(`Error al buscar: ${err.message}`, "danger");
+        if (reportVisualizer) reportVisualizer.classList.add("hidden");
       } finally {
         hideLoader();
       }
-    });
+    };
   }
 
-  if (btnDescargarPDF) {
-    btnDescargarPDF.addEventListener("click", async () => {
+  // 2. EVENTO DESCARGAR PDF
+  if (btnDescargar) {
+    btnDescargar.onclick = async () => {
       if (!datosActuales) {
         showAlert("Primero debe buscar un paciente.", "warning");
         return;
       }
 
-      const observaciones = inputObservaciones.value;
-      const idDsa = datosActuales.dsa.idDsa;
+      const observaciones = inputObservaciones ? inputObservaciones.value : "";
+      
+      // NOTA: Para guardar observaciones necesitas el ID. 
+      // Si el backend nuevo no lo envía en la raíz, esta línea podría fallar.
+      // Por ahora intentamos obtenerlo de donde sea posible o lo omitimos si es null.
+      const idDsa = datosActuales.idDsa || (datosActuales.dsa ? datosActuales.dsa.idDsa : null);
+      
+      // CORREGIDO: Usamos datosActuales.dni
+      const dniPaciente = datosActuales.dni || document.getElementById("viz-dni")?.textContent.trim();
 
       showLoader();
       try {
-        // 1. GUARDAMOS LAS OBSERVACIONES
-        await guardarObservacionDsaAPI(idDsa, observaciones);
-        showAlert("Observaciones guardadas con éxito.", "success");
+        // Solo guardamos si tenemos ID
+        if(idDsa) {
+            await guardarObservacionDsaAPI(idDsa, observaciones);
+        }
+        
+        showAlert("Generando PDF...", "success");
 
-        // 2. SIMULAMOS LA DESCARGA (Próximo paso: JasperReports)
-        console.log("Observaciones guardadas, iniciando descarga simulada...");
-        alert(
-          "Observaciones guardadas. La descarga real del PDF se implementará con JasperReports."
-        );
+        const url = `http://localhost:8080/api/informes/dsa/pdf?dni=${dniPaciente}`;
+        await downloadPdfAPI(url, `informe_dsa_${dniPaciente}.pdf`);
 
-        // (Aquí irá la llamada a JasperReports)
-        // const idPaciente = datosActuales.dsa.idPaciente;
-        // window.location.href = `http://localhost:8080/reporte/dsa/${idPaciente}/${idDsa}`;
       } catch (err) {
         console.error(err);
-        showAlert(`Error al guardar observaciones: ${err.message}`, "danger");
+        showAlert(`Error: ${err.message}`, "danger");
       } finally {
         hideLoader();
       }
-    });
+    };
   }
 
-  document
-    .getElementById("breadcrumb-inicio")
-    ?.addEventListener("click", (e) => {
-      e.preventDefault();
-      resetToHomeView();
-    });
+  const breadcrumb = document.getElementById("breadcrumb-inicio");
+  if(breadcrumb) breadcrumb.onclick = (e) => { e.preventDefault(); resetToHomeView(); };
 
+  // --- Helper de renderizado CORREGIDO ---
   function cargarDatosVisualizacionDSA(data) {
-    datosActuales = data;
+    const setText = (id, val) => { const el = document.getElementById(id); if(el) el.textContent = val; };
+    
+    // CORREGIDO: Lectura de propiedades planas (sin .dsa)
+    setText("viz-paciente", data.nombrePaciente);
+    setText("viz-dni", data.dni);
+    setText("viz-muestra", data.muestra);
+    setText("viz-fecha", data.fecha); // Agregamos fecha si existe en el HTML
+    // setText("viz-medico", data.medicoSolicitante); // Este dato no venía en el DTO nuevo, lo comentamos o lo manejamos
 
-    vizPaciente.textContent = data.dsa.nombrePaciente;
-    vizDni.textContent = data.dsa.dniPaciente;
-    vizMuestra.textContent = data.dsa.numeroMuestra;
-    vizMedico.textContent = data.dsa.medicoSolicitante;
+    if (tablaClase1Body) tablaClase1Body.innerHTML = "";
+    if (tablaClase2Body) tablaClase2Body.innerHTML = "";
 
-    tablaClase1Body.innerHTML = "";
-    tablaClase2Body.innerHTML = "";
+    // data.anticuerpos sigue siendo una lista en la raíz
+    const lista = data.anticuerpos || [];
+    const clase1 = lista.filter((ac) => ac.tipo === "Clase1");
+    const clase2 = lista.filter((ac) => ac.tipo === "Clase2");
 
-    // Separamos Clase1 y Clase2
-    const clase1 = data.anticuerpos.filter((ac) => ac.tipo === "Clase1");
-    const clase2 = data.anticuerpos.filter((ac) => ac.tipo === "Clase2");
+    if (tablaClase1Body) {
+        clase1.forEach((ac) => {
+          tablaClase1Body.innerHTML += `<tr><td>${ac.serologico}</td><td>${ac.alelico}</td><td>${ac.mfi}</td><td>${ac.resultado}</td></tr>`;
+        });
+    }
+    if (tablaClase2Body) {
+        clase2.forEach((ac) => {
+          tablaClase2Body.innerHTML += `<tr><td>${ac.serologico}</td><td>${ac.alelico}</td><td>${ac.mfi}</td><td>${ac.resultado}</td></tr>`;
+        });
+    }
 
-    clase1.forEach((ac) => {
-      const fila = `<tr><td>${ac.serologico}</td><td>${ac.alelico}</td><td>${ac.mfi}</td><td>${ac.resultado}</td></tr>`;
-      tablaClase1Body.innerHTML += fila;
-    });
-    clase2.forEach((ac) => {
-      const fila = `<tr><td>${ac.serologico}</td><td>${ac.alelico}</td><td>${ac.mfi}</td><td>${ac.resultado}</td></tr>`;
-      tablaClase2Body.innerHTML += fila;
-    });
-
-    reportVisualizer.classList.remove("hidden");
+    if (reportVisualizer) reportVisualizer.classList.remove("hidden");
   }
 }
 
@@ -130,236 +132,170 @@ export function initInformeDsaModule() {
 // ==========================================================
 export function initInformeFamiliarModule() {
   const btnBuscar = document.getElementById("btnBuscarInforme");
-  const btnDescargarPDF = document.getElementById("btnDescargarPDF");
-  const reportVisualizer = document.getElementById("report-visualizer");
-
-  const vizPaciente = document.getElementById("viz-paciente");
-  const tablaAbcBody = document.querySelector("#tabla-familiar-abc tbody");
-  const tablaDrqBody = document.querySelector("#tabla-familiar-drq tbody");
-  const inputObservaciones = document.getElementById("inputObservaciones"); // <-- Necesario
-
-  let datosActuales = null; // Guardará { paciente: {...}, donantes: [...], notaGeneral: "...", idHlaReferencia: ... }
-
-  if (btnBuscar) {
-    // Convertido a ASYNC
-    btnBuscar.addEventListener("click", async () => {
-      const queryDni = document.getElementById("inputDni")?.value;
-      if (!queryDni) {
-        showAlert("Por favor, ingrese un DNI para buscar.", "warning");
-        return;
-      }
-
-      showLoader();
-      try {
-        // LLAMADA REAL A LA API
-        const data = await getInformeFamiliarAPI(queryDni);
-        cargarDatosVisualizacionFamiliar(data);
-        // Precargar la nota general si existe
-        inputObservaciones.value = data.notaGeneral || "";
-      } catch (err) {
-        console.error(err);
-        showAlert(`Error al buscar el informe: ${err.message}`, "danger");
-        reportVisualizer.classList.add("hidden");
-      } finally {
-        hideLoader();
-      }
-    });
-  }
-
-  if (btnDescargarPDF) {
-    // Convertido a ASYNC
-    btnDescargarPDF.addEventListener("click", async () => {
-      if (!datosActuales || !datosActuales.paciente) {
-        showAlert("Primero debe buscar un paciente.", "warning");
-        return;
-      }
-      // El ID del HLA de referencia que nos envió el backend
-      const idHlaReferencia = datosActuales.idHlaReferencia;
-      if (!idHlaReferencia) {
-        showAlert(
-          "No se encontró un estudio HLA de referencia para guardar la nota. Asegúrese de que el paciente tenga al menos un estudio HLA cargado.",
-          "warning"
-        );
-        // Podríamos simular la descarga sin guardar, o detenernos.
-        // Por ahora, simulamos sin guardar.
-        console.warn("No hay idHlaReferencia, no se guardará la nota.");
-        alert(
-          "Simulación de descarga FAMILIAR (Nota no guardada por falta de HLA ref.)"
-        );
-        return; // Detener si no hay ID para guardar
-      }
-
-      const observaciones = inputObservaciones.value;
-
-      showLoader();
-      try {
-        // 1. GUARDAMOS LA NOTA GENERAL
-        await guardarObservacionFamiliarAPI(idHlaReferencia, observaciones);
-        showAlert("Nota general guardada con éxito.", "success");
-
-        // 2. SIMULAMOS LA DESCARGA
-        console.log("Nota familiar guardada, iniciando descarga simulada...");
-        alert(
-          "Nota guardada. La descarga real del PDF se implementará con JasperReports."
-        );
-      } catch (err) {
-        console.error(err);
-        showAlert(`Error al guardar la nota: ${err.message}`, "danger");
-      } finally {
-        hideLoader();
-      }
-    });
-  }
-
-  document
-    .getElementById("breadcrumb-inicio")
-    ?.addEventListener("click", (e) => {
-      e.preventDefault();
-      resetToHomeView();
-    });
-
-  // Función de Carga (Actualizada para usar DTO)
-  function cargarDatosVisualizacionFamiliar(data) {
-    datosActuales = data; // Guardar toda la respuesta
-
-    // El paciente DTO ahora tiene la misma estructura que los donantes
-    const paciente = data.paciente;
-    const donantes = data.donantes || [];
-
-    vizPaciente.textContent = paciente.nombre || "N/A";
-
-    tablaAbcBody.innerHTML = "";
-    tablaDrqBody.innerHTML = "";
-
-    // Función auxiliar (ahora usa los arrays directamente)
-    const crearFilaAbc = (actor) =>
-      actor.abc.map((val) => `<td>${val || "-"}</td>`).join("");
-    const crearFilaDrq = (actor) =>
-      actor.drq.map((val) => `<td>${val || "-"}</td>`).join("");
-
-    // Rellenar Paciente
-    tablaAbcBody.innerHTML += `<tr><td><strong>Paciente</strong></td><td>${
-      paciente.muestra || "-"
-    }</td>${crearFilaAbc(paciente)}</tr>`;
-    tablaDrqBody.innerHTML += `<tr><td><strong>Paciente</strong></td><td>${
-      paciente.muestra || "-"
-    }</td>${crearFilaDrq(paciente)}</tr>`;
-
-    // Rellenar Donantes
-    donantes.forEach((donante) => {
-      tablaAbcBody.innerHTML += `<tr><td>${donante.nombre || "-"} (${
-        donante.vinculo || "-"
-      })</td><td>${donante.muestra || "-"}</td>${crearFilaAbc(donante)}</tr>`;
-      tablaDrqBody.innerHTML += `<tr><td>${donante.nombre || "-"} (${
-        donante.vinculo || "-"
-      })</td><td>${donante.muestra || "-"}</td>${crearFilaDrq(donante)}</tr>`;
-    });
-
-    reportVisualizer.classList.remove("hidden");
-  }
-}
-
-// ==========================================================
-// === MÓDULO INFORME HLA
-// ==========================================================
-export function initInformeHlaModule() {
-  const btnBuscar = document.getElementById("btnBuscarInforme");
-  const btnDescargarPDF = document.getElementById("btnDescargarPDF");
+  const btnDescargar = document.getElementById("btnDescargarPDF");
   const reportVisualizer = document.getElementById("report-visualizer");
   const inputObservaciones = document.getElementById("inputObservaciones");
-
-  let datosActuales = null; // Guardará la respuesta completa: { paciente: {...} }
+  
+  let datosActuales = null;
 
   if (btnBuscar) {
-    btnBuscar.addEventListener("click", async () => {
+    btnBuscar.onclick = async () => {
       const queryDni = document.getElementById("inputDni")?.value;
-      if (!queryDni) {
-        showAlert("Por favor, ingrese un DNI para buscar.", "warning");
-        return;
-      }
-
+      if (!queryDni) { showAlert("Ingrese DNI.", "warning"); return; }
+      
       showLoader();
       try {
-        // 1. Guardar observaciones (esto ya lo tienes y está bien)
-        await guardarObservacionDsaAPI(idDsa, observaciones);
-        showAlert("Observaciones guardadas. Descargando PDF...", "success");
-
-        // 2. Iniciar la descarga REAL
-        // Como es una descarga de archivo binario, lo mejor es redirigir o abrir ventana
-        const dni = document.getElementById("viz-dni").textContent;
-        window.location.href = `http://localhost:8080/api/informes/descargar-pdf/dsa/${dni}`;
+        const data = await getInformeFamiliarAPI(queryDni);
+        datosActuales = data;
+        cargarDatosVisualizacionFamiliar(data);
+        if(inputObservaciones) inputObservaciones.value = data.notaGeneral || "";
       } catch (err) {
         console.error(err);
-        showAlert(`Error al buscar el informe: ${err.message}`, "danger");
-        reportVisualizer.classList.add("hidden");
+        showAlert(`Error: ${err.message}`, "danger");
+        if(reportVisualizer) reportVisualizer.classList.add("hidden");
       } finally {
         hideLoader();
       }
-    });
+    };
   }
 
-  if (btnDescargarPDF) {
-    // --- EVENT LISTENER ACTUALIZADO ---
-    btnDescargarPDF.addEventListener("click", async () => {
+  if (btnDescargar) {
+    btnDescargar.onclick = async () => {
       if (!datosActuales || !datosActuales.paciente) {
-        showAlert("Primero debe buscar un paciente.", "warning");
-        return;
+        showAlert("Busque un paciente primero.", "warning"); return;
       }
-
-      const observaciones = inputObservaciones.value;
-      const idDsa = datosActuales.dsa.idDsa;
-
-      // Obtenemos el DNI del DOM para armar la URL
-      const dniPaciente = document.getElementById("viz-dni").textContent.trim();
-
+      const idHlaReferencia = datosActuales.idHlaReferencia;
+      const dni = datosActuales.paciente.dni; // Obtenemos DNI para la URL
+      const observaciones = inputObservaciones ? inputObservaciones.value : "";
+      
       showLoader();
       try {
-        // 1. GUARDAR OBSERVACIONES (Igual que antes)
-        await guardarObservacionDsaAPI(idDsa, observaciones);
-        showAlert("Observaciones guardadas. Descargando PDF...", "success");
+        if(idHlaReferencia) {
+            await guardarObservacionFamiliarAPI(idHlaReferencia, observaciones);
+        }
+        
+        // CORREGIDO: Implementación de descarga PDF
+        showAlert("Generando PDF...", "success");
+        const url = `http://localhost:8080/api/informes/familiar/pdf?dni=${dni}`;
+        await downloadPdfAPI(url, `informe_familiar_${dni}.pdf`);
 
-        // 2. DESCARGA REAL (Esta es la línea nueva)
-        // Redirigimos al navegador a la URL de descarga del backend
-        const urlDescarga = `http://localhost:8080/api/informes/descargar-pdf/dsa/${dniPaciente}`;
-        window.location.href = urlDescarga;
       } catch (err) {
-        console.error(err);
         showAlert(`Error: ${err.message}`, "danger");
       } finally {
         hideLoader();
       }
-    });
+    };
   }
 
-  document
-    .getElementById("breadcrumb-inicio")
-    ?.addEventListener("click", (e) => {
-      e.preventDefault();
-      resetToHomeView();
+  function cargarDatosVisualizacionFamiliar(data) {
+    const p = data.paciente;
+    const donantes = data.donantes || []; // Ahora coincide con el DTO backend
+    
+    const vizP = document.getElementById("viz-paciente");
+    if(vizP) vizP.textContent = p.nombre || "N/A";
+
+    const tAbc = document.querySelector("#tabla-familiar-abc tbody");
+    const tDrq = document.querySelector("#tabla-familiar-drq tbody");
+    if(tAbc) tAbc.innerHTML = "";
+    if(tDrq) tDrq.innerHTML = "";
+
+    const rowAbc = (actor) => (actor.abc || []).map((v) => `<td>${v||"-"}</td>`).join("");
+    const rowDrq = (actor) => (actor.drq || []).map((v) => `<td>${v||"-"}</td>`).join("");
+
+    if(tAbc) tAbc.innerHTML += `<tr><td><strong>Paciente</strong></td><td>${p.muestra||"-"}</td>${rowAbc(p)}</tr>`;
+    if(tDrq) tDrq.innerHTML += `<tr><td><strong>Paciente</strong></td><td>${p.muestra||"-"}</td>${rowDrq(p)}</tr>`;
+
+    donantes.forEach(d => {
+      if(tAbc) tAbc.innerHTML += `<tr><td>${d.nombre} (${d.vinculo})</td><td>${d.muestra}</td>${rowAbc(d)}</tr>`;
+      if(tDrq) tDrq.innerHTML += `<tr><td>${d.nombre} (${d.vinculo})</td><td>${d.muestra}</td>${rowDrq(d)}</tr>`;
     });
 
-  function cargarDatosVisualizacionHla(data) {
-    datosActuales = data;
-    const p = data.paciente;
+    if(reportVisualizer) reportVisualizer.classList.remove("hidden");
+  }
+}
 
-    document.getElementById("viz-paciente").textContent = p.nombre;
-    document.getElementById("viz-dni").textContent = p.dni;
-    document.getElementById("viz-muestra").textContent = p.muestra;
-    document.getElementById("viz-grupo").textContent = p.grupoSanguineo;
-    document.getElementById("viz-hla-a1").textContent = p.hla.a1;
-    document.getElementById("viz-hla-a2").textContent = p.hla.a2;
-    document.getElementById("viz-hla-b1").textContent = p.hla.b1;
-    document.getElementById("viz-hla-b2").textContent = p.hla.b2;
-    document.getElementById("viz-hla-bw1").textContent = p.hla.bw1 || "-"; // Relleno si es null
-    document.getElementById("viz-hla-bw2").textContent = p.hla.bw2 || "-"; // Relleno si es null
-    document.getElementById("viz-hla-c1").textContent = p.hla.c1;
-    document.getElementById("viz-hla-c2").textContent = p.hla.c2;
-    document.getElementById("viz-hla-dr1").textContent = p.hla.dr1;
-    document.getElementById("viz-hla-dr2").textContent = p.hla.dr2;
-    document.getElementById("viz-hla-dq1").textContent = p.hla.dq1;
-    document.getElementById("viz-hla-dq2").textContent = p.hla.dq2;
-    document.getElementById("viz-hla-dp1").textContent = p.hla.dp1;
-    document.getElementById("viz-hla-dp2").textContent = p.hla.dp2;
-    reportVisualizer.classList.remove("hidden");
+// ==========================================================
+// === MÓDULO INFORME HLA (Inscripción)
+// ==========================================================
+export function initInformeHlaModule() {
+  const btnBuscar = document.getElementById("btnBuscarInforme");
+  const btnDescargar = document.getElementById("btnDescargarPDF");
+  const reportVisualizer = document.getElementById("report-visualizer");
+  const inputObservaciones = document.getElementById("inputObservaciones");
+  
+  let datosActuales = null;
+
+  if (btnBuscar) {
+    btnBuscar.onclick = async () => {
+      const queryDni = document.getElementById("inputDni")?.value;
+      if (!queryDni) { showAlert("Ingrese DNI.", "warning"); return; }
+      
+      showLoader();
+      try {
+        const data = await getInformeHlaAPI(queryDni);
+        // data trae { paciente: { ... } } según tu controller
+        datosActuales = data; 
+        cargarDatosVisualizacionHla(data);
+        if(inputObservaciones && data.paciente && data.paciente.hla) {
+             inputObservaciones.value = data.paciente.hla.observaciones || "";
+        }
+      } catch (err) {
+        console.error(err);
+        showAlert(`Error: ${err.message}`, "danger");
+        if(reportVisualizer) reportVisualizer.classList.add("hidden");
+      } finally {
+        hideLoader();
+      }
+    };
+  }
+
+  if (btnDescargar) {
+    btnDescargar.onclick = async () => {
+      if (!datosActuales || !datosActuales.paciente) {
+        showAlert("Primero busque un paciente.", "warning"); return;
+      }
+      const idHla = datosActuales.paciente.idHla;
+      const dni = datosActuales.paciente.dni;
+      const obs = inputObservaciones ? inputObservaciones.value : "";
+      
+      showLoader();
+      try {
+        if(idHla) {
+            await guardarObservacionHlaAPI(idHla, obs);
+        }
+        // CORREGIDO: Implementación de descarga PDF
+        showAlert("Generando PDF...", "success");
+        const url = `http://localhost:8080/api/informes/hla/pdf?dni=${dni}`;
+        await downloadPdfAPI(url, `formulario_inscripcion_${dni}.pdf`);
+
+      } catch (err) {
+        showAlert(`Error: ${err.message}`, "danger");
+      } finally {
+        hideLoader();
+      }
+    };
+  }
+
+  function cargarDatosVisualizacionHla(data) {
+    const p = data.paciente;
+    const set = (id, v) => { const el = document.getElementById(id); if(el) el.textContent = v||"-"; };
+
+    set("viz-paciente", p.nombre);
+    set("viz-dni", p.dni);
+    set("viz-muestra", p.muestra);
+    set("viz-grupo", p.grupoSanguineo);
+    
+    // Asumiendo que p.hla existe y tiene estructura plana o anidada según tu DTO HlaSimpleDTO
+    if (p.hla) {
+        set("viz-hla-a1", p.hla.a1); set("viz-hla-a2", p.hla.a2);
+        set("viz-hla-b1", p.hla.b1); set("viz-hla-b2", p.hla.b2);
+        set("viz-hla-bw1", p.hla.bw1); set("viz-hla-bw2", p.hla.bw2);
+        set("viz-hla-c1", p.hla.c1); set("viz-hla-c2", p.hla.c2);
+        set("viz-hla-dr1", p.hla.dr1); set("viz-hla-dr2", p.hla.dr2);
+        set("viz-hla-dq1", p.hla.dq1); set("viz-hla-dq2", p.hla.dq2);
+        set("viz-hla-dp1", p.hla.dp1); set("viz-hla-dp2", p.hla.dp2);
+    }
+
+    if(reportVisualizer) reportVisualizer.classList.remove("hidden");
   }
 }

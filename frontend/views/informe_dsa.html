@@ -31,13 +31,21 @@
             Visualización del Informe
         </div>
         <div class="card-body">
-            
+
             <div class="patient-info mb-3 p-3 bg-light border rounded">
                 <div class="row">
-                    <div class="col-md-6"><p><strong>Paciente:</strong> <span id="viz-paciente"></span></p></div>
-                    <div class="col-md-6"><p><strong>DNI:</strong> <span id="viz-dni"></span></p></div>
-                    <div class="col-md-6"><p><strong>N° Muestra:</strong> <span id="viz-muestra"></span></p></div>
-                    <div class="col-md-6"><p><strong>Médico:</strong> <span id="viz-medico"></span></p></div>
+                    <div class="col-md-6">
+                        <p><strong>Paciente:</strong> <span id="viz-paciente"></span></p>
+                    </div>
+                    <div class="col-md-6">
+                        <p><strong>DNI:</strong> <span id="viz-dni"></span></p>
+                    </div>
+                    <div class="col-md-6">
+                        <p><strong>N° Muestra:</strong> <span id="viz-muestra"></span></p>
+                    </div>
+                    <div class="col-md-6">
+                        <p><strong>Médico:</strong> <span id="viz-medico"></span></p>
+                    </div>
                 </div>
             </div>
 
@@ -47,7 +55,12 @@
                     <div class="table-responsive">
                         <table class="table table-bordered table-sm" id="tabla-clase1">
                             <thead>
-                                <tr><th>Serológico</th><th>Alélico</th><th>MFI</th><th>Resultado</th></tr>
+                                <tr>
+                                    <th>Serológico</th>
+                                    <th>Alélico</th>
+                                    <th>MFI</th>
+                                    <th>Resultado</th>
+                                </tr>
                             </thead>
                             <tbody></tbody>
                         </table>
@@ -58,7 +71,12 @@
                     <div class="table-responsive">
                         <table class="table table-bordered table-sm" id="tabla-clase2">
                             <thead>
-                                <tr><th>Serológico</th><th>Alélico</th><th>MFI</th><th>Resultado</th></tr>
+                                <tr>
+                                    <th>Serológico</th>
+                                    <th>Alélico</th>
+                                    <th>MFI</th>
+                                    <th>Resultado</th>
+                                </tr>
                             </thead>
                             <tbody></tbody>
                         </table>
@@ -69,13 +87,12 @@
             <hr>
 
             <h5 class="mt-3">Agregar Observaciones</h5>
-            <textarea id="inputObservaciones" class="form-control" rows="4" placeholder="Escriba aquí las notas adicionales que aparecerán en el PDF final..."></textarea>
-            
+            <textarea id="inputObservaciones" class="form-control" rows="4"
+                placeholder="Escriba aquí las notas adicionales que aparecerán en el PDF final..."></textarea>
+
             <button id="btnDescargarPDF" class="btn btn-success mt-3">
-                <i class="fas fa-download me-1"></i>
-                Descargar PDF (Simulado)
+                <i class="fas fa-download me-1"></i> Descargar PDF
             </button>
         </div>
     </div>
-
 </div>

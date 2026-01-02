@@ -1,0 +1,122 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+  <meta charset="UTF-8"/>
+  <style>
+    @page { size: A4; margin: 2cm; }
+    body { font-family: Helvetica, Arial, sans-serif; font-size: 11px; }
+    .header-row { margin-bottom: 5px; }
+    .title { text-align: center; font-weight: bold; font-size: 12px; margin: 15px 0 5px 0; text-decoration: underline; background-color: #ddd; padding: 5px; border: 1px solid #000; }
+
+    .hla-table { width: 100%; border-collapse: collapse; margin-bottom: 20px; }
+    .hla-table th, .hla-table td { border: 1px solid #000; padding: 5px; text-align: center; vertical-align: middle; }
+    .hla-table th { background-color: #f2f2f2; font-weight: bold; }
+    .col-nombre { text-align: left !important; width: 30%; }
+
+    .info-tecnica { font-size: 10px; margin-bottom: 5px; font-style: italic; }
+    .footer-text { font-size: 10px; margin-top: 10px; text-align: justify; }
+    .signature-line { margin-top: 50px; border-top: 1px solid #000; width: 200px; float: right; text-align: center; padding-top: 5px;}
+  </style>
+</head>
+<body>
+
+<div style="border: 1px solid #000; padding: 10px; margin-bottom: 20px;">
+  <table style="width: 100%;">
+    <tr>
+      <td><strong>Paciente:</strong> <span th:text="${datos.nombre}">Nombre</span></td>
+      <td><strong>Fecha:</strong> <span th:text="${#temporals.format(fechaActual, 'dd/MM/yyyy')}"></span></td>
+    </tr>
+    <tr>
+      <td><strong>DNI:</strong> <span th:text="${datos.dni}"></span></td>
+      <td><strong>Solicitado por:</strong> <span th:text="${datos.medico}"></span></td>
+    </tr>
+  </table>
+</div>
+
+<div class="title">INFORME DE TIPIFICACION HLA A-B-C</div>
+<div class="info-tecnica">Técnica: Biología Molecular PCR SSO-Luminex</div>
+
+<table class="hla-table">
+  <thead>
+  <tr>
+    <th colspan="2">Identificación</th>
+    <th colspan="2">Locus A</th>
+    <th colspan="2">Locus B</th>
+    <th colspan="2">Locus C</th>
+  </tr>
+  </thead>
+  <tbody>
+  <tr>
+    <td class="col-nombre">
+      <strong th:text="${datos.nombre}">Paciente</strong><br/>
+      <span style="font-size: 9px;">Nº Mtra: <span th:text="${datos.muestra}"></span></span>
+    </td>
+    <td style="font-size: 9px;">Paciente</td>
+
+    <td th:text="${datos.hla.a1}"></td> <td th:text="${datos.hla.a2}"></td>
+    <td th:text="${datos.hla.b1}"></td> <td th:text="${datos.hla.b2}"></td>
+    <td th:text="${datos.hla.c1}"></td> <td th:text="${datos.hla.c2}"></td>
+  </tr>
+  <tr th:each="donante : ${donantes}">
+    <td class="col-nombre">
+      <span th:text="${donante.nombre}">Donante 1</span><br/>
+      <span style="font-size: 9px;">Nº Mtra: <span th:text="${donante.muestra}"></span></span>
+    </td>
+    <td style="font-size: 9px;">Vínculo: <span th:text="${donante.vinculo}"></span></td>
+
+    <td th:text="${donante.hla.a1}"></td> <td th:text="${donante.hla.a2}"></td>
+    <td th:text="${donante.hla.b1}"></td> <td th:text="${donante.hla.b2}"></td>
+    <td th:text="${donante.hla.c1}"></td> <td th:text="${donante.hla.c2}"></td>
+  </tr>
+  </tbody>
+</table>
+
+<div class="title">INFORME DE TIPIFICACION HLA DR-DQ-DP</div>
+<div class="info-tecnica">Técnica: Biología Molecular PCR SSO-Luminex</div>
+
+<table class="hla-table" style="font-size: 10px;">
+  <thead>
+  <tr>
+    <th colspan="2">Identificación</th>
+    <th colspan="2">DRB1</th>
+    <th colspan="2">DQA1</th>
+    <th colspan="2">DQB1</th>
+    <th colspan="2">DPA1</th>
+    <th colspan="2">DPB1</th>
+  </tr>
+  </thead>
+  <tbody>
+  <tr>
+    <td class="col-nombre">
+      <strong th:text="${datos.nombre}"></strong>
+    </td>
+    <td>Pac.</td>
+    <td th:text="${datos.hla.dr1}"></td> <td th:text="${datos.hla.dr2}"></td>
+    <td th:text="${datos.hla.dqa1}"></td> <td th:text="${datos.hla.dqa2}"></td>
+    <td th:text="${datos.hla.dqb1}"></td> <td th:text="${datos.hla.dqb2}"></td>
+    <td th:text="${datos.hla.dpa1}"></td> <td th:text="${datos.hla.dpa2}"></td>
+    <td th:text="${datos.hla.dpb1}"></td> <td th:text="${datos.hla.dpb2}"></td>
+  </tr>
+  <tr th:each="donante : ${donantes}">
+    <td class="col-nombre">
+      <span th:text="${donante.nombre}"></span>
+    </td>
+    <td>Don.</td>
+    <td th:text="${donante.hla.dr1}"></td> <td th:text="${donante.hla.dr2}"></td>
+    <td th:text="${donante.hla.dqa1}"></td> <td th:text="${donante.hla.dqa2}"></td>
+    <td th:text="${donante.hla.dqb1}"></td> <td th:text="${donante.hla.dqb2}"></td>
+    <td th:text="${donante.hla.dpa1}"></td> <td th:text="${donante.hla.dpa2}"></td>
+    <td th:text="${donante.hla.dpb1}"></td> <td th:text="${donante.hla.dpb2}"></td>
+  </tr>
+  </tbody>
+</table>
+
+<div class="footer-text">
+  <p><strong>Nota:</strong> <span th:text="${observaciones}"></span></p>
+  <p>Los códigos alfanuméricos corresponden a la nomenclatura del National Marrow Donor Program (NMDP). <br/>
+    Para consultar los alelos: <a href="https://hml.nmdp.org/MacUI/">https://hml.nmdp.org/MacUI/</a></p>
+  <p><em>De acuerdo a la normativa del INCUCAI 475/2023...</em></p>
+</div>
+
+</body>
+</html>

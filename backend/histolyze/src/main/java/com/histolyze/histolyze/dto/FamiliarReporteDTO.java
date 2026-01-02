@@ -13,6 +13,7 @@ import java.util.List;
 @NoArgsConstructor
 public class FamiliarReporteDTO {
     private String nombre;
+    private String dni;
     private String muestra;
     private String vinculo; // Solo para familiares
     private List<String> abc;
@@ -24,6 +25,7 @@ public class FamiliarReporteDTO {
     public FamiliarReporteDTO(TipificacionesHLA hlaPaciente) {
         if (hlaPaciente != null && hlaPaciente.getPaciente() != null) {
             this.nombre = hlaPaciente.getPaciente().getNombre() + " " + hlaPaciente.getPaciente().getApellido();
+            this.dni = hlaPaciente.getPaciente().getDni();
         }
         this.muestra = hlaPaciente != null ? hlaPaciente.getNumeroMuestra() : "N/A";
         this.vinculo = "Paciente"; // Identificador
@@ -44,6 +46,7 @@ public class FamiliarReporteDTO {
     // Constructor para un Familiar (desde la entidad Familiar)
     public FamiliarReporteDTO(Familiar familiar) {
         this.nombre = familiar.getNombre();
+        this.dni = familiar.getDni();
         this.muestra = familiar.getNumeroMuestra();
         this.vinculo = familiar.getVinculo() != null ? familiar.getVinculo().name() : "N/A";
         this.idFamiliar = familiar.getIdFamiliar(); // Guardamos el ID

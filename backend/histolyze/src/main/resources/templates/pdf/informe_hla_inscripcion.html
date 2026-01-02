@@ -1,0 +1,138 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8"/>
+    <style>
+        @page { size: A4; margin: 1cm; }
+        body { font-family: Arial, sans-serif; font-size: 10px; }
+
+        .form-container { border: 2px solid #000; padding: 10px; height: 95vh; position: relative; }
+
+        .header-logos { width: 100%; border-bottom: 2px solid #000; padding-bottom: 10px; margin-bottom: 10px; display: table; }
+        .logo-box { display: table-cell; vertical-align: middle; width: 33%; text-align: center; }
+        .form-title { display: table-cell; vertical-align: middle; width: 34%; text-align: center; font-weight: bold; font-size: 11px; }
+        .form-code { display: table-cell; vertical-align: middle; width: 33%; text-align: right; font-weight: bold; font-size: 14px; }
+
+        .section-title { font-weight: bold; font-size: 12px; margin-top: 10px; border-bottom: 1px solid #000; margin-bottom: 5px; }
+
+        /* Estilos tipo formulario input */
+        .field-row { margin-bottom: 8px; display: block; overflow: hidden; }
+        .field-label { float: left; margin-right: 5px; font-weight: bold; }
+        .field-value { float: left; border: 1px solid #ccc; padding: 2px 5px; min-width: 100px; background: #f9f9f9; }
+        .checkbox-group { display: inline-block; margin-left: 10px; }
+        .checkbox-fake { display: inline-block; width: 10px; height: 10px; border: 1px solid #000; margin-right: 3px; }
+        .checkbox-checked { background-color: #000; }
+
+        /* Tabla de tipificación */
+        .typing-box { border: 1px solid #000; padding: 5px; margin-top: 5px; }
+        .typing-row { margin-bottom: 5px; }
+        .allele-box { display: inline-block; border: 1px solid #000; width: 40px; height: 20px; text-align: center; vertical-align: middle; margin-right: 2px; }
+        .locus-label { display: inline-block; width: 20px; font-weight: bold; }
+
+        .footer-date { position: absolute; bottom: 20px; right: 20px; font-size: 12px; }
+    </style>
+</head>
+<body>
+
+<div class="form-container">
+
+    <div class="header-logos">
+        <div class="logo-box">
+            <strong>MINISTERIO DE SALUD</strong>
+        </div>
+        <div class="form-title">
+            SISTEMA NACIONAL DE INFORMACIÓN...<br/>
+            Formulario Lista de Espera
+        </div>
+        <div class="form-code">23 - LE</div>
+    </div>
+
+    <div class="section-title">Paciente</div>
+    <div class="field-row">
+        <div class="field-label">Nombre y Apellido:</div>
+        <div class="field-value" style="width: 60%;" th:text="${datos.nombre}">JUAN PEREZ</div>
+        <div class="field-label" style="margin-left:10px;">Nro registro:</div>
+        <div class="field-value" style="width: 15%;" th:text="${datos.idHla}"></div>
+    </div>
+    <div class="field-row">
+        <div class="field-label">DNI:</div>
+        <div class="field-value" th:text="${datos.dni}"></div>
+        <div class="field-label" style="margin-left: 20px;">Nº de muestra:</div>
+        <div class="field-value" th:text="${datos.muestra}"></div>
+    </div>
+
+    <div class="section-title">Lista de espera</div>
+    <div class="field-row">
+        <span class="checkbox-fake" th:classappend="${tipoLista == 'RENAL' ? 'checkbox-checked' : ''}"></span> RENAL
+        <span class="checkbox-fake" style="margin-left:10px;"></span> HEPATORRENAL
+        <span class="checkbox-fake" style="margin-left:10px;"></span> RENOPANCREÁTICA
+    </div>
+
+    <div style="margin-top: 20px; border-top: 2px solid #000;"></div>
+    <div class="header-logos" style="border:none; margin-top: 10px;">
+        <div class="logo-box"><strong>INCUCAI</strong></div>
+        <div class="form-title">Laboratorio de Histocompatibilidad</div>
+    </div>
+
+    <div class="section-title">Histocompatibilidad</div>
+
+    <div class="typing-box">
+        <div><strong>Antígenos HLA Clase I</strong> - Fecha: <span th:text="${#temporals.format(fechaActual, 'dd/MM/yyyy')}"></span></div>
+
+        <div class="typing-row" style="margin-top: 10px;">
+            <span class="locus-label">A</span>
+            <div class="allele-box" th:text="${datos.hla.a1}"></div>
+            <div class="allele-box" th:text="${datos.hla.a2}"></div>
+
+            <span class="locus-label" style="margin-left: 15px;">B</span>
+            <div class="allele-box" th:text="${datos.hla.b1}"></div>
+            <div class="allele-box" th:text="${datos.hla.b2}"></div>
+
+            <span class="locus-label" style="margin-left: 15px;">C</span>
+            <div class="allele-box" th:text="${datos.hla.c1}"></div>
+            <div class="allele-box" th:text="${datos.hla.c2}"></div>
+        </div>
+
+        <div style="font-size: 9px; margin-top: 5px;">
+            <span class="checkbox-fake checkbox-checked"></span> Por biología molecular
+            <span class="checkbox-fake" style="margin-left: 10px;"></span> Mediana o baja resolución
+        </div>
+    </div>
+
+    <div class="typing-box">
+        <div><strong>Antígenos HLA Clase II</strong></div>
+
+        <div class="typing-row" style="margin-top: 10px;">
+            <span class="locus-label">DR</span>
+            <div class="allele-box" th:text="${datos.hla?.dr1}"></div>
+            <div class="allele-box" th:text="${datos.hla?.dr2}"></div>
+
+            <span class="locus-label" style="margin-left: 15px;">DQ</span>
+            <div class="allele-box" th:text="${datos.hla?.dq1}"></div>
+            <div class="allele-box" th:text="${datos.hla?.dq2}"></div>
+
+            <span class="locus-label" style="margin-left: 15px;">DP</span>
+            <div class="allele-box" th:text="${datos.hla?.dp1}"></div>
+            <div class="allele-box" th:text="${datos.hla?.dp2}"></div>
+        </div>
+    </div>
+
+    <div class="section-title">Cross match contra panel (PRA)</div>
+    <div class="field-row">
+        <strong>Resultado:</strong> <span th:text="${praGlobal} + '%'">0%</span>
+        <span style="margin-left: 20px;">Clase I: <span th:text="${praClase1} + '%'"></span></span>
+        <span style="margin-left: 20px;">Clase II: <span th:text="${praClase2} + '%'"></span></span>
+    </div>
+
+    <div class="field-row" style="margin-top: 15px;">
+        <strong>Grupo Sanguíneo:</strong> <span class="field-value" th:text="${datos.grupoSanguineo}"></span>
+    </div>
+
+    <div class="footer-date">
+        Fecha de impresión: <span th:text="${#temporals.format(fechaActual, 'dd/MM/yyyy')}"></span>
+    </div>
+
+</div>
+
+</body>
+</html>

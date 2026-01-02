@@ -25,51 +25,100 @@
     <div id="report-visualizer" class="card mb-4 hidden">
         <div class="card-header"><i class="fas fa-eye me-1"></i> Visualización Formulario Inscripción</div>
         <div class="card-body" style="background-color: #f8f9fa; border: 1px solid #dee2e6;">
-            
+
             <div class="text-center mb-3">
                 <h5>SISTEMA NACIONAL DE INFORMACIÓN... </h5>
             </div>
-            
+
             <div class="row border-bottom mb-3">
-                <div class="col-md-6"><p><strong>Paciente:</strong> <span id="viz-paciente"></span></p></div>
-                <div class="col-md-6"><p><strong>DNI:</strong> <span id="viz-dni"></span></p></div>
-                <div class="col-md-6"><p><strong>N° Muestra:</strong> <span id="viz-muestra"></span></p></div>
-                <div class="col-md-6"><p><strong>Grupo Sanguíneo:</strong> <span id="viz-grupo"></span></p></div>
+                <div class="col-md-6">
+                    <p><strong>Paciente:</strong> <span id="viz-paciente"></span></p>
+                </div>
+                <div class="col-md-6">
+                    <p><strong>DNI:</strong> <span id="viz-dni"></span></p>
+                </div>
+                <div class="col-md-6">
+                    <p><strong>N° Muestra:</strong> <span id="viz-muestra"></span></p>
+                </div>
+                <div class="col-md-6">
+                    <p><strong>Grupo Sanguíneo:</strong> <span id="viz-grupo"></span></p>
+                </div>
             </div>
-            
+
             <h5>Histocompatibilidad</h5>
             <div class="row">
                 <div class="col-md-6">
                     <strong>Clase I</strong>
                     <table class="table table-bordered table-sm">
-                        <thead class="table-light"><tr><th>Locus</th><th>Antígeno 1</th><th>Antígeno 2</th></tr></thead>
+                        <thead class="table-light">
+                            <tr>
+                                <th>Locus</th>
+                                <th>Antígeno 1</th>
+                                <th>Antígeno 2</th>
+                            </tr>
+                        </thead>
                         <tbody>
-                            <tr><td>A</td><td><span id="viz-hla-a1"></span></td><td><span id="viz-hla-a2"></span></td></tr>
-                            <tr><td>B</td><td><span id="viz-hla-b1"></span></td><td><span id="viz-hla-b2"></span></td></tr>
-                            <tr><td>Bw</td><td><span id="viz-hla-bw1"></span></td><td><span id="viz-hla-bw2"></span></td></tr>
-                            <tr><td>C</td><td><span id="viz-hla-c1"></span></td><td><span id="viz-hla-c2"></span></td></tr>
+                            <tr>
+                                <td>A</td>
+                                <td><span id="viz-hla-a1"></span></td>
+                                <td><span id="viz-hla-a2"></span></td>
+                            </tr>
+                            <tr>
+                                <td>B</td>
+                                <td><span id="viz-hla-b1"></span></td>
+                                <td><span id="viz-hla-b2"></span></td>
+                            </tr>
+                            <tr>
+                                <td>Bw</td>
+                                <td><span id="viz-hla-bw1"></span></td>
+                                <td><span id="viz-hla-bw2"></span></td>
+                            </tr>
+                            <tr>
+                                <td>C</td>
+                                <td><span id="viz-hla-c1"></span></td>
+                                <td><span id="viz-hla-c2"></span></td>
+                            </tr>
                         </tbody>
                     </table>
                 </div>
                 <div class="col-md-6">
                     <strong>Clase II</strong>
                     <table class="table table-bordered table-sm">
-                        <thead class="table-light"><tr><th>Locus</th><th>Antígeno 1</th><th>Antígeno 2</th></tr></thead>
+                        <thead class="table-light">
+                            <tr>
+                                <th>Locus</th>
+                                <th>Antígeno 1</th>
+                                <th>Antígeno 2</th>
+                            </tr>
+                        </thead>
                         <tbody>
-                            <tr><td>DR</td><td><span id="viz-hla-dr1"></span></td><td><span id="viz-hla-dr2"></span></td></tr>
-                            <tr><td>DQ</td><td><span id="viz-hla-dq1"></span></td><td><span id="viz-hla-dq2"></span></td></tr>
-                            <tr><td>DP</td><td><span id="viz-hla-dp1"></span></td><td><span id="viz-hla-dp2"></span></td></tr>
+                            <tr>
+                                <td>DR</td>
+                                <td><span id="viz-hla-dr1"></span></td>
+                                <td><span id="viz-hla-dr2"></span></td>
+                            </tr>
+                            <tr>
+                                <td>DQ</td>
+                                <td><span id="viz-hla-dq1"></span></td>
+                                <td><span id="viz-hla-dq2"></span></td>
+                            </tr>
+                            <tr>
+                                <td>DP</td>
+                                <td><span id="viz-hla-dp1"></span></td>
+                                <td><span id="viz-hla-dp2"></span></td>
+                            </tr>
                         </tbody>
                     </table>
                 </div>
             </div>
 
             <hr>
-            <h5 class="mt-3">Observaciones</h5>
-            <textarea id="inputObservaciones" class="form-control" rows="4" placeholder="Observaciones adicionales para el PDF..."></textarea>
-            
+            <h5 class="mt-3">Agregar Observaciones</h5>
+            <textarea id="inputObservaciones" class="form-control" rows="4"
+                placeholder="Escriba aquí las notas adicionales que aparecerán en el PDF final..."></textarea>
+
             <button id="btnDescargarPDF" class="btn btn-success mt-3">
-                <i class="fas fa-download me-1"></i> Descargar PDF (Simulado)
+                <i class="fas fa-download me-1"></i> Descargar PDF
             </button>
         </div>
     </div>

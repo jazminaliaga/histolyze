@@ -6,7 +6,6 @@ import com.histolyze.histolyze.repository.*;
 import com.histolyze.histolyze.service.InformeService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import com.histolyze.histolyze.dto.DsaEstudioDTO;
 
 import java.util.Collections;
 import java.util.List;
@@ -14,7 +13,6 @@ import java.util.Optional;
 import java.util.stream.Collectors;
 
 @Service
-// Renombramos la clase y le decimos que "implemente" la interfaz
 public class InformeServiceImpl implements InformeService {
 
     @Autowired
@@ -32,8 +30,8 @@ public class InformeServiceImpl implements InformeService {
     @Autowired
     private AntecedenteRepository antecedenteRepository;
 
-    @Autowired
-    private FamiliarRepository familiarRepository;
+    // @Autowired
+    // private FamiliarRepository familiarRepository; // No se usa explícitamente aquí, pero puedes dejarlo si lo necesitas luego
 
     @Override
     public InformeDsaResponseDTO getDatosInformeDsa(String dni) {
@@ -51,19 +49,22 @@ public class InformeServiceImpl implements InformeService {
         // 3. Traer anticuerpos
         List<AnticuerpoAntiHLA> anticuerpos = anticuerpoRepository.findByDsa(ultimoDsa);
 
-        // 4. Armar el DTO de cabecera (USANDO LA NUEVA CLASE)
-        DsaEstudioDTO dsaDto = new DsaEstudioDTO();
-        dsaDto.setNombrePaciente(ultimoDsa.getNombrePaciente());
-        dsaDto.setDniPaciente(ultimoDsa.getDniPaciente());
-        dsaDto.setMedicoSolicitante(ultimoDsa.getMedicoSolicitante());
-        dsaDto.setNumeroMuestra(ultimoDsa.getNumeroMuestra());
-        dsaDto.setFecha(ultimoDsa.getFecha());
-        dsaDto.setObservaciones(ultimoDsa.getObservaciones());
+        // 4. Armar el DTO de respuesta (USANDO EL NUEVO CONSTRUCTOR PLANO)
+        // El orden de los parámetros debe coincidir con @AllArgsConstructor de InformeDsaResponseDTO:
+        // (nombrePaciente, dni, muestra, fecha, observaciones, dsaSimple, anticuerpos)
 
-        return new InformeDsaResponseDTO(dsaDto, anticuerpos);
+        return new InformeDsaResponseDTO(
+                ultimoDsa.getNombrePaciente(),
+                ultimoDsa.getDniPaciente(),
+                ultimoDsa.getNumeroMuestra(),
+                ultimoDsa.getFecha(),
+                ultimoDsa.getObservaciones(),
+                null, // DsaSimpleDTO (lo dejamos null por ahora ya que usamos los campos planos)
+                anticuerpos
+        );
     }
 
-    @Override // Añadimos @Override
+    @Override
     public void guardarObservacionDsa(Long idDsa, String observaciones) {
         DSA dsa = dsaRepository.findById(idDsa)
                 .orElseThrow(() -> new RuntimeException("Estudio DSA no encontrado con ID: " + idDsa));
@@ -71,7 +72,7 @@ public class InformeServiceImpl implements InformeService {
         dsaRepository.save(dsa);
     }
 
-    @Override // Añadimos @Override
+    @Override
     public InformeHlaResponseDTO getDatosInformeHla(String dni) {
         Paciente paciente = pacienteRepository.findByDni(dni)
                 .orElseThrow(() -> new RuntimeException("Paciente no encontrado con DNI: " + dni));
@@ -103,7 +104,7 @@ public class InformeServiceImpl implements InformeService {
         return responseDto;
     }
 
-    @Override // Añadimos @Override
+    @Override
     public void guardarObservacionHla(Long idHla, String observaciones) {
         TipificacionesHLA hla = tipificacionesHLARepository.findById(idHla)
                 .orElseThrow(() -> new RuntimeException("Registro HLA no encontrado con ID: " + idHla));
@@ -111,7 +112,7 @@ public class InformeServiceImpl implements InformeService {
         tipificacionesHLARepository.save(hla);
     }
 
-    @Override // Añadimos @Override
+    @Override
     public InformeFamiliarResponseDTO getDatosInformeFamiliar(String dni) {
         Paciente paciente = pacienteRepository.findByDni(dni)
                 .orElseThrow(() -> new RuntimeException("Paciente no encontrado con DNI: " + dni));
@@ -120,9 +121,15 @@ public class InformeServiceImpl implements InformeService {
                 .stream().findFirst()
                 .orElse(null);
 
+        // Crear DTO del paciente
         FamiliarReporteDTO pacienteDto = new FamiliarReporteDTO(hlaReferencia);
-        if(hlaReferencia == null && paciente != null){
-            pacienteDto.setNombre(paciente.getNombre() + " " + paciente.getApellido());
+
+        // CORRECCIÓN IMPORTANTE: Asegurar que el DNI y Nombre estén seteados incluso si hlaReferencia es null
+        if (paciente != null) {
+            pacienteDto.setDni(paciente.getDni());
+            if (pacienteDto.getNombre() == null) {
+                pacienteDto.setNombre(paciente.getNombre() + " " + paciente.getApellido());
+            }
         }
 
         List<Familiar> familiares = paciente.getFamiliares() != null ? paciente.getFamiliares() : Collections.emptyList();
@@ -137,7 +144,7 @@ public class InformeServiceImpl implements InformeService {
         return new InformeFamiliarResponseDTO(pacienteDto, donantesDto, notaGeneral, idHlaRef);
     }
 
-    @Override // Añadimos @Override
+    @Override
     public void guardarObservacionFamiliar(Long idHlaReferencia, String observaciones) {
         if (idHlaReferencia == null) {
             throw new RuntimeException("No se puede guardar la nota sin un estudio HLA de referencia.");
