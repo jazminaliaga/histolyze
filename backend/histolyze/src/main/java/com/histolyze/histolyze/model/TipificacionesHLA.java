@@ -35,6 +35,12 @@ public class TipificacionesHLA {
     @Column(name = "locusB_02", length = 50)
     private String locusB02;
 
+    @Column(name = "locusBw_01", length = 50)
+    private String locusBw01;
+
+    @Column(name = "locusBw_02", length = 50)
+    private String locusBw02;
+
     @Column(name = "locusC_01", length = 50)
     private String locusC01;
 
@@ -46,6 +52,12 @@ public class TipificacionesHLA {
 
     @Column(name = "locusDR_02", length = 50)
     private String locusDR02;
+
+    @Column(name = "locusDR_Largo_01", length = 50)
+    private String locusDrLargo01;
+
+    @Column(name = "locusDR_Largo_02", length = 50)
+    private String locusDrLargo02;
 
     @Column(name = "locusDQA_01", length = 50)
     private String locusDQA01;

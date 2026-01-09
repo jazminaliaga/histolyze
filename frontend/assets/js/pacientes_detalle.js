@@ -70,8 +70,10 @@ const formatters = {
       <td>${item.numeroMuestra || "N/A"}</td>
       <td>${item.locusA01 || "-"} / ${item.locusA02 || "-"}</td> 
       <td>${item.locusB01 || "-"} / ${item.locusB02 || "-"}</td>
+      <td>${item.locusBW01 || "-"} / ${item.locusBW02 || "-"}</td>
       <td>${item.locusC01 || "-"} / ${item.locusC02 || "-"}</td>
       <td>${item.locusDR01 || "-"} / ${item.locusDR02 || "-"}</td>
+      <td>${item.locusDRLargo01 || "-"} / ${item.locusDRLargo02 || "-"}</td>
       <td>${item.locusDQA01 || "-"} / ${item.locusDQA02 || "-"}</td>
       <td>${item.locusDQB01 || "-"} / ${item.locusDQB02 || "-"}</td>
       <td>${item.locusDPA01 || "-"} / ${item.locusDPA02 || "-"}</td>
@@ -359,7 +361,6 @@ function renderTablaHistorial(tipo, containerId, headers, formatRow) {
   }
 
   const headerHtml = headers.map((h) => `<th>${h}</th>`).join("");
-  // Pasa 'antecedente' como tercer argumento al formatter (útil para transfusiones)
   const bodyHtml =
     typeof formatRow === "function"
       ? historial
@@ -405,8 +406,10 @@ function renderAllHistorials() {
         "Nro. Muestra",
         "A",
         "B",
+        "BW",
         "C",
         "DR",
+        "DRLargo",
         "DQA",
         "DQB",
         "DPA",
@@ -568,8 +571,10 @@ async function handleAddOrEditHistorial(e, tipo, modalId) {
     registro.hlaData = {
       a1: registro.a1, a2: registro.a2,
       b1: registro.b1, b2: registro.b2,
+      bw1: registro.bw1, bw2: registro.bw2,
       c1: registro.c1, c2: registro.c2,
       dr1: registro.dr1, dr2: registro.dr2,
+      drLargo1: registro.drLargo1, drLargo2: registro.drLargo2,
       dqa1_1: registro.dqa1_1, dqa1_2: registro.dqa1_2,
       dqb1_1: registro.dqb1_1, dqb1_2: registro.dqb1_2,
       dpa1_1: registro.dpa1_1, dpa1_2: registro.dpa1_2,
@@ -577,8 +582,10 @@ async function handleAddOrEditHistorial(e, tipo, modalId) {
     };
     delete registro.a1; delete registro.a2;
     delete registro.b1; delete registro.b2;
+    delete registro.bw1; delete registro.bw2;
     delete registro.c1; delete registro.c2;
     delete registro.dr1; delete registro.dr2;
+    delete registro.drLargo1; delete registro.drLargo2;
     delete registro.dqa1_1; delete registro.dqa1_2;
     delete registro.dqb1_1; delete registro.dqb1_2;
     delete registro.dpa1_1; delete registro.dpa1_2;
@@ -610,10 +617,9 @@ async function handleAddOrEditHistorial(e, tipo, modalId) {
     }
     antecedente = pacienteActual.antecedentes[0];
 
-    // Mover lógica de procesoDonacion aquí si es necesario
     if (tipo === "trasplantes" && registro.procesoDonacion !== undefined) {
       antecedente.procesoDonacion = registro.procesoDonacion;
-      delete registro.procesoDonacion; // Eliminar del objeto trasplante
+      delete registro.procesoDonacion;
     }
 
     const nombreLista =
@@ -708,14 +714,11 @@ async function handleAddOrEditHistorial(e, tipo, modalId) {
       "danger"
     );
 
-    // Revertir el cambio local si falla la API
     if (isEditing && itemOriginal && lista) {
       lista[index] = itemOriginal;
     } else if (!isEditing && lista) {
       lista.pop();
     }
-    // No re-renderizar aquí para evitar perder el estado del formulario
-    // renderAllHistorials(); // Podría ser confuso re-renderizar tras error
   }
 }
 
@@ -807,7 +810,6 @@ async function handleEliminarHistorial(tipo, index) {
     } catch (err) {
       console.error(`Error al eliminar registro de ${tipo}:`, err);
       showAlert(`Error al eliminar el registro: ${err.message}`, "danger");
-      // Revertir el cambio local
       lista.splice(index, 0, itemEliminado);
       renderAllHistorials();
     }
@@ -896,7 +898,7 @@ async function handleVerDsa(index, modalId) {
     return;
   }
   const item = lista[index];
-  const idDsa = item.idDsa; // Ajusta 'idDsa' si se llama 'id'
+  const idDsa = item.idDsa;
 
   if (!idDsa) {
     showAlert(
@@ -906,7 +908,6 @@ async function handleVerDsa(index, modalId) {
     return;
   }
 
-  // Limpiar botones y títulos de modos de edición anteriores
   const saveButton = document.getElementById("btn-guardar-dsa-tabla");
   const modalTitle = document.getElementById("modalVerDsaResultadoLabel");
   if (saveButton) saveButton.style.display = "none";
@@ -929,7 +930,6 @@ async function handleVerDsa(index, modalId) {
   try {
     const anticuerpos = await getAnticuerposDsaAPI(idDsa);
 
-    // Pasamos idDsa para que los botones de editar lo conozcan
     renderTablaMFI(container, anticuerpos, idDsa);
   } catch (err) {
     console.error("Error al cargar anticuerpos DSA:", err);
@@ -964,7 +964,6 @@ function renderTablaMFI(container, anticuerpos, idDsa) {
       return `<td></td><td></td><td></td><td></td><td></td>`;
     }
     const mfiClass = ac.mfi > 1000 ? "fw-bold" : "";
-    // Pasamos el objeto anticuerpo completo como JSON al botón
     const anticuerpoJson = JSON.stringify(ac);
 
     return `

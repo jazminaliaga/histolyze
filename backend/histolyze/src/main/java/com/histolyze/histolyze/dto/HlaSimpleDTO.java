@@ -12,18 +12,24 @@ public class HlaSimpleDTO {
     private String a2;
     private String b1;
     private String b2;
-    private String bw1; // Nota: No tenemos 'Bw' en la BD, se omitirá
-    private String bw2; // Nota: No tenemos 'Bw' en la BD, se omitirá
+    private String bw1;
+    private String bw2;
     private String c1;
     private String c2;
 
     // Clase II
     private String dr1;
     private String dr2;
-    private String dq1; // Usaremos DQB1 para este campo
-    private String dq2; // Usaremos DQB2 para este campo
-    private String dp1; // Usaremos DPB1 para este campo
-    private String dp2; // Usaremos DPB2 para este campo
+    private String drLargo1;
+    private String drLargo2;
+    private String dqa1;
+    private String dqa2;
+    private String dpa1;
+    private String dpa2;
+    private String dqb1;
+    private String dqb2;
+    private String dpb1;
+    private String dpb2;
 
     // Constructor para mapear desde la entidad
     public HlaSimpleDTO(TipificacionesHLA hla) {
@@ -31,14 +37,21 @@ public class HlaSimpleDTO {
         this.a2 = hla.getLocusA02();
         this.b1 = hla.getLocusB01();
         this.b2 = hla.getLocusB02();
+        this.bw1 = hla.getLocusBw01();
+        this.bw2 = hla.getLocusBw02();
         this.c1 = hla.getLocusC01();
         this.c2 = hla.getLocusC02();
         this.dr1 = hla.getLocusDR01();
         this.dr2 = hla.getLocusDR02();
-        this.dq1 = hla.getLocusDQB01(); // Mapeo de DQB
-        this.dq2 = hla.getLocusDQB02();
-        this.dp1 = hla.getLocusDPB01(); // Mapeo de DPB
-        this.dp2 = hla.getLocusDPB02();
-        // Bw no existe en la entidad, por lo que bw1 y bw2 quedarán en null
+        this.drLargo1 = hla.getLocusDrLargo01();
+        this.drLargo2 = hla.getLocusDrLargo02();
+        this.dqa1 = hla.getLocusDQA01();
+        this.dqa2 = hla.getLocusDQA02();
+        this.dqb1 = hla.getLocusDQB01();
+        this.dqb2 = hla.getLocusDQB02();
+        this.dpa1 = hla.getLocusDPA01();
+        this.dpa2 = hla.getLocusDPA02();
+        this.dpb1 = hla.getLocusDPB01();
+        this.dpb2 = hla.getLocusDPB02();
     }
 }

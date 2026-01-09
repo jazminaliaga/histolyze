@@ -80,17 +80,21 @@ export function initAntecedentesModule() {
   const fieldsTrasplantes = [
     document.getElementById("pdTransfusiones"),
     document.getElementById("fechaTrasplante"),
-    document.getElementById("tipoTrasplante"), // Este faltaba en tu versión
+    document.getElementById("tipoTrasplante"),
     document.getElementById("grupoSanguineo"),
     // Campos HLA (no son 'required', pero deben bloquearse)
     document.getElementById("hlaA1"),
     document.getElementById("hlaA2"),
     document.getElementById("hlaB1"),
     document.getElementById("hlaB2"),
+    document.getElementById("hlaBw1"),
+    document.getElementById("hlaBw2"),
     document.getElementById("hlaC1"),
     document.getElementById("hlaC2"),
     document.getElementById("hlaDR1"),
     document.getElementById("hlaDR2"),
+    document.getElementById("hlaDRLargo1"),
+    document.getElementById("hlaDRLargo2"),
     document.getElementById("hlaDQA11"),
     document.getElementById("hlaDQA12"),
     document.getElementById("hlaDQB11"),

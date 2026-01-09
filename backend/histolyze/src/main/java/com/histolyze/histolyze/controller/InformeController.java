@@ -218,10 +218,12 @@ public class InformeController {
         if (abc != null && abc.size() >= 6) {
             hla.put("a1", abc.get(0)); hla.put("a2", abc.get(1));
             hla.put("b1", abc.get(2)); hla.put("b2", abc.get(3));
+            hla.put("bw1", abc.get(4)); hla.put("bw2", abc.get(5));
             hla.put("c1", abc.get(4)); hla.put("c2", abc.get(5));
         }
         if (drq != null && drq.size() >= 10) {
             hla.put("dr1", drq.get(0)); hla.put("dr2", drq.get(1));
+            hla.put("drLargo1", drq.get(2)); hla.put("drLargo2", drq.get(3));
             hla.put("dqa1", drq.get(2)); hla.put("dqa2", drq.get(3));
             hla.put("dqb1", drq.get(4)); hla.put("dqb2", drq.get(5));
             hla.put("dpa1", drq.get(6)); hla.put("dpa2", drq.get(7));

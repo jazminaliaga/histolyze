@@ -32,10 +32,12 @@ public class FamiliarReporteDTO {
         this.abc = hlaPaciente != null ? Arrays.asList(
                 hlaPaciente.getLocusA01(), hlaPaciente.getLocusA02(),
                 hlaPaciente.getLocusB01(), hlaPaciente.getLocusB02(),
+                hlaPaciente.getLocusBw01(), hlaPaciente.getLocusBw02(),
                 hlaPaciente.getLocusC01(), hlaPaciente.getLocusC02()
         ) : Arrays.asList("-", "-", "-", "-", "-", "-");
         this.drq = hlaPaciente != null ? Arrays.asList(
                 hlaPaciente.getLocusDR01(), hlaPaciente.getLocusDR02(),
+                hlaPaciente.getLocusDrLargo01(), hlaPaciente.getLocusDrLargo02(),
                 hlaPaciente.getLocusDQA01(), hlaPaciente.getLocusDQA02(),
                 hlaPaciente.getLocusDQB01(), hlaPaciente.getLocusDQB02(),
                 hlaPaciente.getLocusDPA01(), hlaPaciente.getLocusDPA02(),
@@ -56,10 +58,12 @@ public class FamiliarReporteDTO {
         this.abc = hlaData != null ? Arrays.asList(
                 hlaData.getA1(), hlaData.getA2(),
                 hlaData.getB1(), hlaData.getB2(),
+                hlaData.getBw1(), hlaData.getBw2(),
                 hlaData.getC1(), hlaData.getC2()
         ) : Arrays.asList("-", "-", "-", "-", "-", "-");
         this.drq = hlaData != null ? Arrays.asList(
                 hlaData.getDr1(), hlaData.getDr2(),
+                hlaData.getDrlargo1(), hlaData.getDrlargo2(),
                 hlaData.getDqa1_1(), hlaData.getDqa1_2(),
                 hlaData.getDqb1_1(), hlaData.getDqb1_2(),
                 hlaData.getDpa1_1(), hlaData.getDpa1_2(),

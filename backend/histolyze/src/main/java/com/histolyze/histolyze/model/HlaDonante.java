@@ -19,6 +19,10 @@ public class HlaDonante {
     private String b1;
     @Column(name = "hla_donante_b2")
     private String b2;
+    @Column(name = "hla_donante_bw1")
+    private String bw1;
+    @Column(name = "hla_donante_bw2")
+    private String bw2;
     @Column(name = "hla_donante_c1")
     private String c1;
     @Column(name = "hla_donante_c2")
@@ -29,6 +33,10 @@ public class HlaDonante {
     private String dr1;
     @Column(name = "hla_donante_dr2")
     private String dr2;
+    @Column(name = "hla_donante_drlargo1")
+    private String drlargo1;
+    @Column(name = "hla_donante_drlargo2")
+    private String drlargo2;
     @Column(name = "hla_donante_dqa1_1")
     private String dqa1_1;
     @Column(name = "hla_donante_dqa1_2")
